@@ -18,6 +18,9 @@ class Chore: NSObject, NSCoding {
     var date: Date?
     var repeatType: RepeatType
     var endRepeatDate: Date?
+    var completedDates: [Date]
+    var repeatFromDate: Date?
+    var deleteOnCompletion: Bool
     
     //MARK: Archiving Paths
     
@@ -32,14 +35,31 @@ class Chore: NSObject, NSCoding {
         static let date = "date"
         static let repeatType = "repeatType"
         static let endRepeatDate = "endRepeatDate"
+        static let completedDates = "completedDates"
+        static let repeatFromDate = "repeatFromDate"
+        static let deleteOnCompletion = "deleteOnCompletion"
     }
     
-    init(name: String, type: ChoreType, date: Date?, repeatType: RepeatType, endRepeatDate: Date?) {
+    init(name: String, type: ChoreType, date: Date?, repeatType: RepeatType, endRepeatDate: Date?, repeatFromDate: Date?, deleteOnCompletion: Bool) {
         self.name=name
         self.type=type
         self.date=date
         self.repeatType=repeatType
         self.endRepeatDate=endRepeatDate
+        self.completedDates = [Date]()
+        self.repeatFromDate = repeatFromDate
+        self.deleteOnCompletion=deleteOnCompletion
+    }
+    
+    init(name: String, type: ChoreType, date: Date?, repeatType: RepeatType, endRepeatDate: Date?, completedDates: [Date], repeatFromDate: Date?, deleteOnCompletion: Bool) {
+        self.name=name
+        self.type=type
+        self.date=date
+        self.repeatType=repeatType
+        self.endRepeatDate=endRepeatDate
+        self.completedDates = completedDates
+        self.repeatFromDate = repeatFromDate
+        self.deleteOnCompletion=deleteOnCompletion
     }
     
     //MARK: NSCoding
@@ -50,6 +70,9 @@ class Chore: NSObject, NSCoding {
         aCoder.encode(date, forKey: PropertyKey.date)
         aCoder.encode(repeatType.rawValue, forKey: PropertyKey.repeatType)
         aCoder.encode(endRepeatDate, forKey: PropertyKey.endRepeatDate)
+        aCoder.encode(completedDates, forKey: PropertyKey.completedDates)
+        aCoder.encode(repeatFromDate, forKey: PropertyKey.repeatFromDate)
+        aCoder.encode(deleteOnCompletion, forKey: PropertyKey.deleteOnCompletion)
     }
     
     required convenience init?(coder aDecoder: NSCoder) {
@@ -76,6 +99,12 @@ class Chore: NSObject, NSCoding {
         
         let endRepeatDate = aDecoder.decodeObject(forKey: PropertyKey.endRepeatDate) as? Date
         
-        self.init(name: name, type: type, date: date, repeatType: repeatType ?? RepeatType.none, endRepeatDate: endRepeatDate)
+        let completedDates = aDecoder.decodeObject(forKey: PropertyKey.completedDates) as? [Date] ?? [Date]()
+        
+        let repeatFromDate = aDecoder.decodeObject(forKey: PropertyKey.repeatFromDate) as? Date
+        
+        let deleteOnCompletion = aDecoder.decodeObject(forKey: PropertyKey.deleteOnCompletion) as? Bool ?? false
+        
+        self.init(name: name, type: type, date: date, repeatType: repeatType ?? RepeatType.none, endRepeatDate: endRepeatDate, completedDates: completedDates, repeatFromDate: repeatFromDate, deleteOnCompletion: deleteOnCompletion)
     }
 }

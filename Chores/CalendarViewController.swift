@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import YACalendar
 
 enum ViewType {
     case month, year
@@ -37,6 +36,9 @@ class CalendarViewController: UIViewController {
     var tableDate: Date!
     var endRepeatDate: Date!
     private let calendar = Calendar.current
+    
+    var showHistory = false
+    var completedDates: [Date]!
 
     private let yearFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -70,6 +72,9 @@ class CalendarViewController: UIViewController {
         }
         else if (setTableDate) {
             calendarView.selectDay(with: tableDate)
+        }
+        else if (showHistory) {
+            calendarView.selectDays(with: completedDates)
         }
        
        // calendarView.selectDays(with: [Calendar.current.date(byAdding: .day, value: 1, to: Date())!])
@@ -130,7 +135,12 @@ class CalendarViewController: UIViewController {
     }
 }
 
+extension CalendarView : CalendarViewDelegate {
+ 
+}
 extension CalendarViewController: CalendarViewDelegate {
+    
+    
     
     func didSelectDate(_ date: Date) {
         if viewType == .year {
@@ -168,6 +178,8 @@ extension CalendarViewController: CalendarViewDelegate {
     
     func didSelectRange(_ startDate: Date, endDate: Date) {
         print("did select range \(startDate) - \(endDate)")
+        
+        calendarView.selectDays(with: completedDates)
     }
     
     func didUpdateDisplayedDate(_ date: Date) {

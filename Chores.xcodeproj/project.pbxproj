@@ -3,11 +3,32 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 50;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		032979EF2505CDE8000F6DDC /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 032979EE2505CDE8000F6DDC /* CalendarViewController.swift */; };
+		034630A8250D680E00C49651 /* YearHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03463090250D680D00C49651 /* YearHeaderView.swift */; };
+		034630A9250D680E00C49651 /* MonthHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03463091250D680D00C49651 /* MonthHeaderView.swift */; };
+		034630AA250D680E00C49651 /* DayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03463092250D680D00C49651 /* DayView.swift */; };
+		034630AB250D680E00C49651 /* SelectionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03463095250D680D00C49651 /* SelectionType.swift */; };
+		034630AC250D680E00C49651 /* DaySymbols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03463096250D680D00C49651 /* DaySymbols.swift */; };
+		034630AD250D680E00C49651 /* MonthData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03463097250D680D00C49651 /* MonthData.swift */; };
+		034630AE250D680E00C49651 /* DayIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03463098250D680D00C49651 /* DayIndicator.swift */; };
+		034630AF250D680E00C49651 /* DayState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03463099250D680D00C49651 /* DayState.swift */; };
+		034630B0250D680E00C49651 /* ScrollDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0346309A250D680D00C49651 /* ScrollDirection.swift */; };
+		034630B1250D680E00C49651 /* CalendarType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0346309B250D680D00C49651 /* CalendarType.swift */; };
+		034630B2250D680E00C49651 /* DayData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0346309C250D680D00C49651 /* DayData.swift */; };
+		034630B3250D680E00C49651 /* CalendarData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0346309D250D680D00C49651 /* CalendarData.swift */; };
+		034630B4250D680E00C49651 /* WeekData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0346309E250D680D00C49651 /* WeekData.swift */; };
+		034630B5250D680E00C49651 /* СalendarEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0346309F250D680D00C49651 /* СalendarEvent.swift */; };
+		034630B6250D680E00C49651 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034630A0250D680D00C49651 /* CalendarView.swift */; };
+		034630B7250D680E00C49651 /* YearHeaderConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034630A2250D680D00C49651 /* YearHeaderConfig.swift */; };
+		034630B8250D680E00C49651 /* DaySymbolsConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034630A3250D680D00C49651 /* DaySymbolsConfig.swift */; };
+		034630B9250D680E00C49651 /* DayConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034630A4250D680E00C49651 /* DayConfig.swift */; };
+		034630BA250D680E00C49651 /* MonthHeaderConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034630A5250D680E00C49651 /* MonthHeaderConfig.swift */; };
+		034630BB250D680E00C49651 /* MonthConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034630A6250D680E00C49651 /* MonthConfig.swift */; };
+		034630BC250D680E00C49651 /* Grid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034630A7250D680E00C49651 /* Grid.swift */; };
 		036F882E24F9C3FA00B32CB4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036F882D24F9C3FA00B32CB4 /* AppDelegate.swift */; };
 		036F883024F9C3FA00B32CB4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036F882F24F9C3FA00B32CB4 /* SceneDelegate.swift */; };
 		036F883224F9C3FA00B32CB4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036F883124F9C3FA00B32CB4 /* ViewController.swift */; };
@@ -20,8 +41,6 @@
 		036F885624FABA9000B32CB4 /* CreateChoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036F885524FABA9000B32CB4 /* CreateChoreViewController.swift */; };
 		036F885824FABD1500B32CB4 /* DayTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036F885724FABD1500B32CB4 /* DayTableViewController.swift */; };
 		036F885A24FABDB200B32CB4 /* ChoreTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036F885924FABDB200B32CB4 /* ChoreTableViewCell.swift */; };
-		B05B01D70C2DD132709E44FC /* Pods_ChoresTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5FC4F548BA042C57C7F9DC33 /* Pods_ChoresTests.framework */; };
-		E2171A7BA4A78E31C922B7F4 /* Pods_Chores.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3020F6731BD34DBE5B8E62 /* Pods_Chores.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +55,28 @@
 
 /* Begin PBXFileReference section */
 		032979EE2505CDE8000F6DDC /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
+		03463090250D680D00C49651 /* YearHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YearHeaderView.swift; sourceTree = "<group>"; };
+		03463091250D680D00C49651 /* MonthHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MonthHeaderView.swift; sourceTree = "<group>"; };
+		03463092250D680D00C49651 /* DayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DayView.swift; sourceTree = "<group>"; };
+		03463093250D680D00C49651 /* YACalendar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = YACalendar.h; path = "../../../Desktop/YACalendar-master 2/YACalendar/YACalendar/YACalendar.h"; sourceTree = "<group>"; };
+		03463095250D680D00C49651 /* SelectionType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectionType.swift; sourceTree = "<group>"; };
+		03463096250D680D00C49651 /* DaySymbols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DaySymbols.swift; sourceTree = "<group>"; };
+		03463097250D680D00C49651 /* MonthData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MonthData.swift; sourceTree = "<group>"; };
+		03463098250D680D00C49651 /* DayIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DayIndicator.swift; sourceTree = "<group>"; };
+		03463099250D680D00C49651 /* DayState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DayState.swift; sourceTree = "<group>"; };
+		0346309A250D680D00C49651 /* ScrollDirection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollDirection.swift; sourceTree = "<group>"; };
+		0346309B250D680D00C49651 /* CalendarType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalendarType.swift; sourceTree = "<group>"; };
+		0346309C250D680D00C49651 /* DayData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DayData.swift; sourceTree = "<group>"; };
+		0346309D250D680D00C49651 /* CalendarData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalendarData.swift; sourceTree = "<group>"; };
+		0346309E250D680D00C49651 /* WeekData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeekData.swift; sourceTree = "<group>"; };
+		0346309F250D680D00C49651 /* СalendarEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "СalendarEvent.swift"; sourceTree = "<group>"; };
+		034630A0250D680D00C49651 /* CalendarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CalendarView.swift; path = "../../../Desktop/YACalendar-master 2/YACalendar/YACalendar/CalendarView.swift"; sourceTree = "<group>"; };
+		034630A2250D680D00C49651 /* YearHeaderConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YearHeaderConfig.swift; sourceTree = "<group>"; };
+		034630A3250D680D00C49651 /* DaySymbolsConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DaySymbolsConfig.swift; sourceTree = "<group>"; };
+		034630A4250D680E00C49651 /* DayConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DayConfig.swift; sourceTree = "<group>"; };
+		034630A5250D680E00C49651 /* MonthHeaderConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MonthHeaderConfig.swift; sourceTree = "<group>"; };
+		034630A6250D680E00C49651 /* MonthConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MonthConfig.swift; sourceTree = "<group>"; };
+		034630A7250D680E00C49651 /* Grid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Grid.swift; path = "../../../Desktop/YACalendar-master 2/YACalendar/YACalendar/Grid.swift"; sourceTree = "<group>"; };
 		036F882A24F9C3FA00B32CB4 /* Chores.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Chores.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		036F882D24F9C3FA00B32CB4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		036F882F24F9C3FA00B32CB4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -52,12 +93,6 @@
 		036F885524FABA9000B32CB4 /* CreateChoreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateChoreViewController.swift; sourceTree = "<group>"; };
 		036F885724FABD1500B32CB4 /* DayTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayTableViewController.swift; sourceTree = "<group>"; };
 		036F885924FABDB200B32CB4 /* ChoreTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChoreTableViewCell.swift; sourceTree = "<group>"; };
-		0588C057BF42D23AAA6BDE43 /* Pods-ChoresTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChoresTests.release.xcconfig"; path = "Target Support Files/Pods-ChoresTests/Pods-ChoresTests.release.xcconfig"; sourceTree = "<group>"; };
-		0B6F4FECD2E70A3ABCF5BE11 /* Pods-ChoresTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChoresTests.debug.xcconfig"; path = "Target Support Files/Pods-ChoresTests/Pods-ChoresTests.debug.xcconfig"; sourceTree = "<group>"; };
-		4C3020F6731BD34DBE5B8E62 /* Pods_Chores.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Chores.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		5FC4F548BA042C57C7F9DC33 /* Pods_ChoresTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChoresTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		8FB55FEB84E8E0381012FD20 /* Pods-Chores.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Chores.debug.xcconfig"; path = "Target Support Files/Pods-Chores/Pods-Chores.debug.xcconfig"; sourceTree = "<group>"; };
-		AF9D4CE65579C6363EAFFED7 /* Pods-Chores.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Chores.release.xcconfig"; path = "Target Support Files/Pods-Chores/Pods-Chores.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,7 +100,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E2171A7BA4A78E31C922B7F4 /* Pods_Chores.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -73,21 +107,75 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B05B01D70C2DD132709E44FC /* Pods_ChoresTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0346308E250D67F900C49651 /* YACalendar */ = {
+			isa = PBXGroup;
+			children = (
+				034630A0250D680D00C49651 /* CalendarView.swift */,
+				034630A1250D680D00C49651 /* Configs */,
+				03463094250D680D00C49651 /* Data */,
+				034630A7250D680E00C49651 /* Grid.swift */,
+				0346308F250D680D00C49651 /* Views */,
+				03463093250D680D00C49651 /* YACalendar.h */,
+			);
+			path = YACalendar;
+			sourceTree = "<group>";
+		};
+		0346308F250D680D00C49651 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				03463090250D680D00C49651 /* YearHeaderView.swift */,
+				03463091250D680D00C49651 /* MonthHeaderView.swift */,
+				03463092250D680D00C49651 /* DayView.swift */,
+			);
+			name = Views;
+			path = "../../../Desktop/YACalendar-master 2/YACalendar/YACalendar/Views";
+			sourceTree = "<group>";
+		};
+		03463094250D680D00C49651 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				03463095250D680D00C49651 /* SelectionType.swift */,
+				03463096250D680D00C49651 /* DaySymbols.swift */,
+				03463097250D680D00C49651 /* MonthData.swift */,
+				03463098250D680D00C49651 /* DayIndicator.swift */,
+				03463099250D680D00C49651 /* DayState.swift */,
+				0346309A250D680D00C49651 /* ScrollDirection.swift */,
+				0346309B250D680D00C49651 /* CalendarType.swift */,
+				0346309C250D680D00C49651 /* DayData.swift */,
+				0346309D250D680D00C49651 /* CalendarData.swift */,
+				0346309E250D680D00C49651 /* WeekData.swift */,
+				0346309F250D680D00C49651 /* СalendarEvent.swift */,
+			);
+			name = Data;
+			path = "../../../Desktop/YACalendar-master 2/YACalendar/YACalendar/Data";
+			sourceTree = "<group>";
+		};
+		034630A1250D680D00C49651 /* Configs */ = {
+			isa = PBXGroup;
+			children = (
+				034630A2250D680D00C49651 /* YearHeaderConfig.swift */,
+				034630A3250D680D00C49651 /* DaySymbolsConfig.swift */,
+				034630A4250D680E00C49651 /* DayConfig.swift */,
+				034630A5250D680E00C49651 /* MonthHeaderConfig.swift */,
+				034630A6250D680E00C49651 /* MonthConfig.swift */,
+			);
+			name = Configs;
+			path = "../../../Desktop/YACalendar-master 2/YACalendar/YACalendar/Configs";
+			sourceTree = "<group>";
+		};
 		036F882124F9C3F900B32CB4 = {
 			isa = PBXGroup;
 			children = (
+				0346308E250D67F900C49651 /* YACalendar */,
 				036F882C24F9C3FA00B32CB4 /* Chores */,
 				036F884324F9C3FB00B32CB4 /* ChoresTests */,
 				036F882B24F9C3FA00B32CB4 /* Products */,
-				218FCF941DD765EF484141B9 /* Pods */,
-				45A6FC68A29A095BA2FEB3F9 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -129,26 +217,6 @@
 			path = ChoresTests;
 			sourceTree = "<group>";
 		};
-		218FCF941DD765EF484141B9 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				8FB55FEB84E8E0381012FD20 /* Pods-Chores.debug.xcconfig */,
-				AF9D4CE65579C6363EAFFED7 /* Pods-Chores.release.xcconfig */,
-				0B6F4FECD2E70A3ABCF5BE11 /* Pods-ChoresTests.debug.xcconfig */,
-				0588C057BF42D23AAA6BDE43 /* Pods-ChoresTests.release.xcconfig */,
-			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
-		45A6FC68A29A095BA2FEB3F9 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				4C3020F6731BD34DBE5B8E62 /* Pods_Chores.framework */,
-				5FC4F548BA042C57C7F9DC33 /* Pods_ChoresTests.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -156,11 +224,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 036F884924F9C3FB00B32CB4 /* Build configuration list for PBXNativeTarget "Chores" */;
 			buildPhases = (
-				6479B4AA48F4C49EB5D36FBC /* [CP] Check Pods Manifest.lock */,
 				036F882624F9C3FA00B32CB4 /* Sources */,
 				036F882724F9C3FA00B32CB4 /* Frameworks */,
 				036F882824F9C3FA00B32CB4 /* Resources */,
-				F38AE278C6DDFF4DF85D599A /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -249,28 +315,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		6479B4AA48F4C49EB5D36FBC /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Chores-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
 		B81D86FFE2E05FA2E703463D /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -293,23 +337,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		F38AE278C6DDFF4DF85D599A /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Chores/Pods-Chores-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Chores/Pods-Chores-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Chores/Pods-Chores-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -317,15 +344,36 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				034630B1250D680E00C49651 /* CalendarType.swift in Sources */,
+				034630B4250D680E00C49651 /* WeekData.swift in Sources */,
+				034630BB250D680E00C49651 /* MonthConfig.swift in Sources */,
+				034630B6250D680E00C49651 /* CalendarView.swift in Sources */,
+				034630B3250D680E00C49651 /* CalendarData.swift in Sources */,
 				036F883224F9C3FA00B32CB4 /* ViewController.swift in Sources */,
+				034630AA250D680E00C49651 /* DayView.swift in Sources */,
+				034630B7250D680E00C49651 /* YearHeaderConfig.swift in Sources */,
+				034630B0250D680E00C49651 /* ScrollDirection.swift in Sources */,
+				034630A9250D680E00C49651 /* MonthHeaderView.swift in Sources */,
+				034630AB250D680E00C49651 /* SelectionType.swift in Sources */,
 				036F885424FAB9FA00B32CB4 /* ChoreType.swift in Sources */,
+				034630BA250D680E00C49651 /* MonthHeaderConfig.swift in Sources */,
 				036F882E24F9C3FA00B32CB4 /* AppDelegate.swift in Sources */,
 				036F885224FAB95400B32CB4 /* Chore.swift in Sources */,
+				034630B5250D680E00C49651 /* СalendarEvent.swift in Sources */,
+				034630B8250D680E00C49651 /* DaySymbolsConfig.swift in Sources */,
+				034630A8250D680E00C49651 /* YearHeaderView.swift in Sources */,
+				034630AE250D680E00C49651 /* DayIndicator.swift in Sources */,
 				036F885824FABD1500B32CB4 /* DayTableViewController.swift in Sources */,
+				034630AD250D680E00C49651 /* MonthData.swift in Sources */,
 				036F885624FABA9000B32CB4 /* CreateChoreViewController.swift in Sources */,
+				034630AC250D680E00C49651 /* DaySymbols.swift in Sources */,
+				034630BC250D680E00C49651 /* Grid.swift in Sources */,
 				032979EF2505CDE8000F6DDC /* CalendarViewController.swift in Sources */,
+				034630B2250D680E00C49651 /* DayData.swift in Sources */,
 				036F883024F9C3FA00B32CB4 /* SceneDelegate.swift in Sources */,
 				036F885A24FABDB200B32CB4 /* ChoreTableViewCell.swift in Sources */,
+				034630B9250D680E00C49651 /* DayConfig.swift in Sources */,
+				034630AF250D680E00C49651 /* DayState.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -483,7 +531,6 @@
 		};
 		036F884A24F9C3FB00B32CB4 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8FB55FEB84E8E0381012FD20 /* Pods-Chores.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -502,7 +549,6 @@
 		};
 		036F884B24F9C3FB00B32CB4 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = AF9D4CE65579C6363EAFFED7 /* Pods-Chores.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -521,7 +567,6 @@
 		};
 		036F884D24F9C3FB00B32CB4 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0B6F4FECD2E70A3ABCF5BE11 /* Pods-ChoresTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -544,7 +589,6 @@
 		};
 		036F884E24F9C3FB00B32CB4 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0588C057BF42D23AAA6BDE43 /* Pods-ChoresTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";

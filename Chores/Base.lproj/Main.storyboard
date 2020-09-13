@@ -35,11 +35,29 @@
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <state key="normal" title="DONE"/>
                                         </button>
+                                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WN6-qP-O6J">
+                                            <rect key="frame" x="213" y="10" width="33" height="30"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <state key="normal" title="SKIP"/>
+                                        </button>
+                                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ReW-qY-K6A">
+                                            <rect key="frame" x="263" y="10" width="41" height="30"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <state key="normal" title="PUSH"/>
+                                        </button>
+                                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FE1-bb-ulC">
+                                            <rect key="frame" x="366" y="14" width="21" height="22"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <state key="normal" image="calendar" catalog="system"/>
+                                        </button>
                                     </subviews>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="doneButton" destination="3sH-BR-W1w" id="9Md-Of-gy0"/>
+                                    <outlet property="doneButton" destination="3sH-BR-W1w" id="76e-pg-Fww"/>
+                                    <outlet property="historyButton" destination="FE1-bb-ulC" id="CDO-ep-u9F"/>
                                     <outlet property="nameLabel" destination="jqV-Dg-xsv" id="wrC-yi-QbI"/>
+                                    <outlet property="pushButton" destination="ReW-qY-K6A" id="s3K-oK-o2e"/>
+                                    <outlet property="skipButton" destination="WN6-qP-O6J" id="xec-aH-zSq"/>
                                     <segue destination="1ym-dK-VYk" kind="show" identifier="ShowDetail" id="h2N-h4-Gp6"/>
                                 </connections>
                             </tableViewCell>
@@ -49,13 +67,37 @@
                             <outlet property="delegate" destination="NHX-fY-FTz" id="Stt-xx-bX4"/>
                         </connections>
                     </tableView>
+                    <toolbarItems>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="Ydr-D2-T6S"/>
+                    </toolbarItems>
                     <navigationItem key="navigationItem" title="Chores" id="yX5-YN-c6I">
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="Mei-Lp-pab">
-                            <connections>
-                                <segue destination="C2F-P0-cIX" kind="presentation" identifier="AddItem" id="ZO6-gE-WmS"/>
-                            </connections>
-                        </barButtonItem>
+                        <leftBarButtonItems>
+                            <barButtonItem title="Home" image="house.fill" catalog="system" id="QIh-ZN-o9M"/>
+                            <barButtonItem width="21" id="FjO-Vc-86X">
+                                <color key="tintColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                            </barButtonItem>
+                            <barButtonItem title="LeftArrow" image="arrow.left" catalog="system" id="nkT-w3-50H"/>
+                        </leftBarButtonItems>
+                        <rightBarButtonItems>
+                            <barButtonItem systemItem="add" id="Mei-Lp-pab">
+                                <connections>
+                                    <segue destination="C2F-P0-cIX" kind="presentation" identifier="AddItem" id="ZO6-gE-WmS"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem width="29" id="YD7-R2-zjf">
+                                <color key="tintColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                            </barButtonItem>
+                            <barButtonItem title="RightArrow" image="arrow.right" catalog="system" id="4xY-PM-8m0"/>
+                        </rightBarButtonItems>
                     </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="homeButton" destination="QIh-ZN-o9M" id="tIm-nX-aBy"/>
+                        <outlet property="leftArrowButton" destination="nkT-w3-50H" id="xbP-ce-QSL"/>
+                        <outlet property="leftSpacer" destination="FjO-Vc-86X" id="3Ie-ha-ecf"/>
+                        <outlet property="rightArrowButton" destination="4xY-PM-8m0" id="efT-Xo-cNE"/>
+                        <outlet property="rightSpacer" destination="YD7-R2-zjf" id="2Yd-88-tw5"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Vut-fS-lXU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -83,28 +125,49 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Next Scheduled Date:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mlc-Rp-hEA">
-                                <rect key="frame" x="20" y="190" width="180" height="39"/>
+                                <rect key="frame" x="20" y="233" width="180" height="39"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Delete on completion:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a2K-vD-5fP">
+                                <rect key="frame" x="20" y="147" width="180" height="39"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Not Scheduled:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pf9-Nc-F2p">
+                                <rect key="frame" x="20" y="290" width="180" height="39"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Repeat:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jrh-O1-qo8">
-                                <rect key="frame" x="20" y="320" width="180" height="39"/>
+                                <rect key="frame" x="20" y="413" width="180" height="39"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="End Repeat:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LtF-by-MAt">
-                                <rect key="frame" x="20" y="547" width="180" height="39"/>
+                                <rect key="frame" x="20" y="633" width="180" height="39"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Push back repeat if delayed:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Eza-bG-Gc1">
+                                <rect key="frame" x="20" y="711" width="217" height="39"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8Y6-E5-PDj">
-                                <rect key="frame" x="223" y="184" width="115" height="45"/>
+                                <rect key="frame" x="221" y="230" width="115" height="45"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button"/>
                                 <connections>
@@ -112,11 +175,11 @@
                                 </connections>
                             </button>
                             <pickerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8ib-9W-UvL">
-                                <rect key="frame" x="188" y="227" width="206" height="225"/>
+                                <rect key="frame" x="188" y="320" width="206" height="225"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             </pickerView>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ckt-I3-RMC">
-                                <rect key="frame" x="208" y="547" width="104" height="35"/>
+                                <rect key="frame" x="208" y="633" width="104" height="35"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button"/>
                                 <connections>
@@ -124,9 +187,26 @@
                                 </connections>
                             </button>
                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ndu-ev-51h">
-                                <rect key="frame" x="335" y="547" width="49" height="31"/>
+                                <rect key="frame" x="335" y="633" width="49" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </switch>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="af1-To-1fp">
+                                <rect key="frame" x="289" y="715" width="49" height="31"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </switch>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eBe-KE-c5F">
+                                <rect key="frame" x="243" y="294" width="49" height="31"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </switch>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fSH-sV-lCE">
+                                <rect key="frame" x="243" y="151" width="49" height="31"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </switch>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vHT-EW-UwU">
+                                <rect key="frame" x="148" y="768" width="102" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="DELETE"/>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <viewLayoutGuide key="safeArea" id="7f8-Fw-2xr"/>
@@ -145,9 +225,16 @@
                     </navigationItem>
                     <connections>
                         <outlet property="calendarButton" destination="8Y6-E5-PDj" id="s3t-eS-x78"/>
+                        <outlet property="deleteButton" destination="vHT-EW-UwU" id="UDJ-vT-0Ec"/>
+                        <outlet property="deleteOnCompletionSwitch" destination="fSH-sV-lCE" id="s8s-gG-2nm"/>
                         <outlet property="endRepeatButton" destination="ckt-I3-RMC" id="bf9-Im-KVO"/>
+                        <outlet property="endRepeatLabel" destination="LtF-by-MAt" id="YfL-A9-mMT"/>
                         <outlet property="endRepeatSwitch" destination="Ndu-ev-51h" id="BIb-Hk-N4e"/>
                         <outlet property="nameTextField" destination="Axb-Vs-aGZ" id="0UL-Ks-9SN"/>
+                        <outlet property="notScheduledSwitch" destination="eBe-KE-c5F" id="aO3-X5-r3s"/>
+                        <outlet property="pushBackLabel" destination="Eza-bG-Gc1" id="zv7-S2-kkL"/>
+                        <outlet property="pushBackRepeatSwitch" destination="af1-To-1fp" id="YoA-eg-eDg"/>
+                        <outlet property="repeatLabel" destination="Jrh-O1-qo8" id="gyi-pi-1zG"/>
                         <outlet property="repeatPicker" destination="8ib-9W-UvL" id="eSK-Ky-vdd"/>
                         <outlet property="saveButton" destination="KhV-bq-mA4" id="vdp-dH-XUH"/>
                     </connections>
@@ -161,7 +248,7 @@
         <scene sceneID="foj-XB-qap">
             <objects>
                 <viewController restorationIdentifier="calendarView" storyboardIdentifier="calendarView" id="bup-LD-zap" customClass="CalendarViewController" customModule="Chores" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="LJO-5P-jKW" customClass="CalendarView" customModule="YACalendar">
+                    <view key="view" contentMode="scaleToFill" id="LJO-5P-jKW" customClass="CalendarView" customModule="Chores">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
@@ -192,33 +279,30 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zpt-Js-0Gt">
-                                <rect key="frame" x="116" y="423" width="168" height="69"/>
+                                <rect key="frame" x="116" y="313" width="168" height="69"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="27"/>
                                 <state key="normal" title="Unscheduled"/>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hjg-R5-e7i">
-                                <rect key="frame" x="116" y="528" width="168" height="69"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="27"/>
-                                <state key="normal" title="All Chores"/>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wgV-ae-x2U">
-                                <rect key="frame" x="116" y="648" width="168" height="69"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="27"/>
-                                <state key="normal" title="New Chore"/>
                                 <connections>
-                                    <segue destination="C2F-P0-cIX" kind="show" id="eah-Sp-ATz"/>
+                                    <segue destination="8t3-si-i9U" kind="show" identifier="unscheduledButton" id="VrW-JM-uN8"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kzb-DY-avG">
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" restorationIdentifier="todayButton" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kzb-DY-avG">
                                 <rect key="frame" x="116" y="167" width="168" height="69"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="27"/>
                                 <state key="normal" title="Today"/>
                                 <connections>
-                                    <segue destination="8t3-si-i9U" kind="show" id="B1N-cC-jdG"/>
+                                    <segue destination="8t3-si-i9U" kind="show" identifier="todayButton" id="B1N-cC-jdG"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hjg-R5-e7i">
+                                <rect key="frame" x="116" y="488" width="168" height="69"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="27"/>
+                                <state key="normal" title="All Chores"/>
+                                <connections>
+                                    <segue destination="8t3-si-i9U" kind="show" identifier="allButton" id="80g-hW-gqt"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -233,7 +317,7 @@
         <!--Navigation Controller-->
         <scene sceneID="GSt-ef-VgH">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="8t3-si-i9U" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="todayNavigation" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="8t3-si-i9U" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="ga1-ve-VY6"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="ddn-Pl-ce3">
@@ -270,8 +354,14 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="ZO6-gE-WmS"/>
+        <segue reference="80g-hW-gqt"/>
         <segue reference="RQf-e5-fpD"/>
         <segue reference="h2N-h4-Gp6"/>
     </inferredMetricsTieBreakers>
+    <resources>
+        <image name="arrow.left" catalog="system" width="128" height="98"/>
+        <image name="arrow.right" catalog="system" width="128" height="98"/>
+        <image name="calendar" catalog="system" width="128" height="106"/>
+        <image name="house.fill" catalog="system" width="128" height="106"/>
+    </resources>
 </document>

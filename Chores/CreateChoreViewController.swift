@@ -8,7 +8,6 @@
 
 import UIKit
 import os.log
-import YACalendar
 
 class CalendarSettings {
     var gridType: CalendarType = .threeOnFour
@@ -29,9 +28,17 @@ class CreateChoreViewController: UIViewController, UITextFieldDelegate, UIPicker
     @IBOutlet weak var repeatPicker: UIPickerView!
     @IBOutlet weak var endRepeatButton: UIButton!
     @IBOutlet weak var endRepeatSwitch: UISwitch!
+    @IBOutlet weak var pushBackRepeatSwitch: UISwitch!
+    @IBOutlet weak var notScheduledSwitch: UISwitch!
+    @IBOutlet weak var deleteOnCompletionSwitch: UISwitch!
+    
+    @IBOutlet weak var deleteButton: UIButton!
+    @IBOutlet weak var repeatLabel: UILabel!
+    @IBOutlet weak var endRepeatLabel: UILabel!
+    @IBOutlet weak var pushBackLabel: UILabel!
     
     var chore: Chore?
-    var displayDate = getCorrectDate(date: Date())
+    var displayDate: Date?
     var displayDateSetFromCalendar = false
     
     var endRepeatDate: Date?
@@ -55,8 +62,11 @@ class CreateChoreViewController: UIViewController, UITextFieldDelegate, UIPicker
         if (chore != nil) && !displayDateSetFromCalendar {
             calendarButton.setTitle(dateFormatter.string(for: chore?.date) ?? "None", for: .normal)
         }
-        else {
+        else if (displayDate != nil) {
              calendarButton.setTitle(dateFormatter.string(for: displayDate), for: .normal)
+        }
+        else {
+            calendarButton.setTitle("None", for: .normal)
         }
         
         if (chore != nil) && !endRepeatDateSetFromCalendar {
@@ -70,14 +80,27 @@ class CreateChoreViewController: UIViewController, UITextFieldDelegate, UIPicker
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        displayDate = getCorrectDate(date: Date())
+        
         self.repeatPicker.delegate = self
         self.repeatPicker.dataSource = self
         repeatPickerData = RepeatType.allCases.map {$0.rawValue}
         nameTextField.delegate = self
         
-        endRepeatSwitch.addTarget(self, action: #selector(stateChanged), for:   .valueChanged)
+        endRepeatSwitch.addTarget(self, action: #selector(endRepeatStateChanged), for:   .valueChanged)
         endRepeatSwitch.setOn(false, animated: true)
         endRepeatSwitch.isEnabled=false
+        
+        pushBackRepeatSwitch.setOn(false, animated: true)
+        pushBackRepeatSwitch.isEnabled=false
+        
+        notScheduledSwitch.addTarget(self, action: #selector(notScheduledStateChanged), for: .valueChanged)
+        notScheduledSwitch.setOn(false, animated: true)
+        
+        deleteOnCompletionSwitch.setOn(false, animated: true)
+        
+        deleteButton.addTarget(self, action: #selector(deleteButtonPushed), for: .touchUpInside)
+        
         
         if let chore = chore {
             navigationItem.title = chore.name
@@ -90,6 +113,11 @@ class CreateChoreViewController: UIViewController, UITextFieldDelegate, UIPicker
             if chore.endRepeatDate != nil {
                 endRepeatSwitch.setOn(true, animated: true)
                 endRepeatSwitch.isEnabled=true
+            }
+            
+            if chore.date == nil {
+                notScheduledSwitch.setOn(true, animated: true)
+                hideScheduleItems()
             }
         }
        
@@ -146,7 +174,7 @@ class CreateChoreViewController: UIViewController, UITextFieldDelegate, UIPicker
         let dateButton = sender as? UIButton
         if let controller = segue.destination as? CalendarViewController {
             controller.settings = settings
-            controller.displayDate=getCorrectDate(date: displayDate)
+            controller.displayDate=getCorrectDate(date: displayDate ?? Date())
             controller.endRepeatDate=endRepeatDate
             if (dateButton === calendarButton) {
                 controller.setScheduleButton=true
@@ -164,7 +192,13 @@ class CreateChoreViewController: UIViewController, UITextFieldDelegate, UIPicker
         
         if (button === saveButton) {
             let name = nameTextField.text ?? ""
-            chore = Chore(name: name, type: ChoreType.oneTime, date: displayDate, repeatType: RepeatType(rawValue: repeatPickerData[repeatPickerSelection]) ?? RepeatType.none, endRepeatDate: endRepeatDate)
+            let repeatFromDate = pushBackRepeatSwitch.isOn ? nil : displayDate
+            let date = notScheduledSwitch.isOn ? nil : displayDate
+            chore = Chore(name: name, type: ChoreType.oneTime, date: date, repeatType: RepeatType(rawValue: repeatPickerData[repeatPickerSelection]) ?? RepeatType.none, endRepeatDate: endRepeatDate, repeatFromDate: repeatFromDate, deleteOnCompletion: deleteOnCompletionSwitch.isOn)
+        }
+        
+        if (button === deleteButton) {
+            
         }
         
        
@@ -191,9 +225,33 @@ class CreateChoreViewController: UIViewController, UITextFieldDelegate, UIPicker
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         repeatPickerSelection = row
+        if (RepeatType(rawValue: repeatPickerData[repeatPickerSelection]) != RepeatType.none) {
+            pushBackRepeatSwitch.isEnabled=true
+        }
+        else {
+            pushBackRepeatSwitch.setOn(false, animated: true)
+            pushBackRepeatSwitch.isEnabled=false
+        }
     }
     
-    @objc func stateChanged(switchState: UISwitch) {
+    @objc func deleteButtonPushed() {
+        for index in (0 ... (navigationController?.viewControllers.count)! - 1).reversed(){
+                   if let previousController = navigationController?.viewControllers[index] as? DayTableViewController {
+                    
+                    if let selectedIndexPath = previousController.tableView.indexPathForSelectedRow {
+                        print("deleting at button")
+                        print(selectedIndexPath.row)
+                        previousController.chores.remove(at: selectedIndexPath.row)
+                        previousController.tableView.reloadData()
+                    }
+            }
+        }
+        
+        navigationController?.popViewController(animated: true)
+        
+    }
+    
+    @objc func endRepeatStateChanged(switchState: UISwitch) {
         if !switchState.isOn {
             endRepeatDate = nil
              endRepeatButton.setTitle("None", for: .normal)
@@ -202,6 +260,33 @@ class CreateChoreViewController: UIViewController, UITextFieldDelegate, UIPicker
         else {
             endRepeatSwitch.isEnabled=true
         }
+    }
+    
+    private func hideScheduleItems() {
+        if notScheduledSwitch.isOn {
+            displayDate = nil
+            calendarButton.setTitle("None", for: .normal)
+            
+            repeatPicker.isHidden=true
+            endRepeatSwitch.isHidden=true
+            endRepeatButton.isHidden=true
+            repeatLabel.isHidden=true
+            endRepeatLabel.isHidden=true
+            pushBackLabel.isHidden=true
+            pushBackRepeatSwitch.isHidden=true
+        }
+        else {
+            repeatPicker.isHidden=false
+            endRepeatSwitch.isHidden=false
+            endRepeatButton.isHidden=false
+            repeatLabel.isHidden=false
+            endRepeatLabel.isHidden=false
+            pushBackLabel.isHidden=false
+            pushBackRepeatSwitch.isHidden=false
+        }
+    }
+    @objc func notScheduledStateChanged(switchState: UISwitch) {
+       hideScheduleItems()
     }
 
 }
