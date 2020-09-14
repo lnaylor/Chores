@@ -12,12 +12,7 @@ enum ViewType {
     case month, year
 }
 
-func getCorrectDate(date: Date) -> Date {
-       let formatter = DateFormatter()
-       formatter.dateFormat = "MM/dd/yyyy"
-     
-       return formatter.date(from: formatter.string(from: date)) ?? date
-}
+
 
 class CalendarViewController: UIViewController {
     
@@ -165,7 +160,7 @@ extension CalendarViewController: CalendarViewDelegate {
             }
             else if let previousController = navigationController?.viewControllers[index] as? DayTableViewController {
                 if (setTableDate) {
-                    previousController.date = getCorrectDate(date: date)
+                    previousController.displayDate = getCorrectDate(date: date)
                     previousController.titleButton.setTitle(dateFormatter.string(for: date), for: .normal)
                     previousController.tableView.reloadData()
                    

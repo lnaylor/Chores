@@ -21,6 +21,9 @@ class Chore: NSObject, NSCoding {
     var completedDates: [Date]
     var repeatFromDate: Date?
     var deleteOnCompletion: Bool
+    var customRepeatNumber: Int?
+    var customRepeatUnit: CustomRepeatUnit?
+    var toDo: Bool
     
     //MARK: Archiving Paths
     
@@ -38,9 +41,12 @@ class Chore: NSObject, NSCoding {
         static let completedDates = "completedDates"
         static let repeatFromDate = "repeatFromDate"
         static let deleteOnCompletion = "deleteOnCompletion"
+        static let customRepeatNumber = "customRepeatNumber"
+        static let customRepeatUnit = "customRepeatUnit"
+        static let toDo = "toDo"
     }
     
-    init(name: String, type: ChoreType, date: Date?, repeatType: RepeatType, endRepeatDate: Date?, repeatFromDate: Date?, deleteOnCompletion: Bool) {
+    init(name: String, type: ChoreType, date: Date?, repeatType: RepeatType, endRepeatDate: Date?, repeatFromDate: Date?, deleteOnCompletion: Bool, customRepeatNumber: Int?, customRepeatUnit: CustomRepeatUnit?, toDo: Bool) {
         self.name=name
         self.type=type
         self.date=date
@@ -49,9 +55,12 @@ class Chore: NSObject, NSCoding {
         self.completedDates = [Date]()
         self.repeatFromDate = repeatFromDate
         self.deleteOnCompletion=deleteOnCompletion
+        self.customRepeatNumber=customRepeatNumber
+        self.customRepeatUnit = customRepeatUnit
+        self.toDo = toDo
     }
     
-    init(name: String, type: ChoreType, date: Date?, repeatType: RepeatType, endRepeatDate: Date?, completedDates: [Date], repeatFromDate: Date?, deleteOnCompletion: Bool) {
+    init(name: String, type: ChoreType, date: Date?, repeatType: RepeatType, endRepeatDate: Date?, completedDates: [Date], repeatFromDate: Date?, deleteOnCompletion: Bool, customRepeatNumber: Int?, customRepeatUnit: CustomRepeatUnit?, toDo: Bool) {
         self.name=name
         self.type=type
         self.date=date
@@ -60,6 +69,9 @@ class Chore: NSObject, NSCoding {
         self.completedDates = completedDates
         self.repeatFromDate = repeatFromDate
         self.deleteOnCompletion=deleteOnCompletion
+        self.customRepeatNumber=customRepeatNumber
+        self.customRepeatUnit = customRepeatUnit
+        self.toDo = toDo
     }
     
     //MARK: NSCoding
@@ -73,6 +85,9 @@ class Chore: NSObject, NSCoding {
         aCoder.encode(completedDates, forKey: PropertyKey.completedDates)
         aCoder.encode(repeatFromDate, forKey: PropertyKey.repeatFromDate)
         aCoder.encode(deleteOnCompletion, forKey: PropertyKey.deleteOnCompletion)
+        aCoder.encode(customRepeatNumber, forKey: PropertyKey.customRepeatNumber)
+        aCoder.encode(customRepeatUnit, forKey: PropertyKey.customRepeatUnit)
+        aCoder.encode(toDo, forKey: PropertyKey.toDo)
     }
     
     required convenience init?(coder aDecoder: NSCoder) {
@@ -103,8 +118,21 @@ class Chore: NSObject, NSCoding {
         
         let repeatFromDate = aDecoder.decodeObject(forKey: PropertyKey.repeatFromDate) as? Date
         
-        let deleteOnCompletion = aDecoder.decodeObject(forKey: PropertyKey.deleteOnCompletion) as? Bool ?? false
+        let deleteOnCompletion = aDecoder.decodeBool(forKey: PropertyKey.deleteOnCompletion) as Bool
         
-        self.init(name: name, type: type, date: date, repeatType: repeatType ?? RepeatType.none, endRepeatDate: endRepeatDate, completedDates: completedDates, repeatFromDate: repeatFromDate, deleteOnCompletion: deleteOnCompletion)
+        var customRepeatNumber: Int?
+        if let customRepeatNumberString = aDecoder.decodeObject(forKey: PropertyKey.customRepeatNumber) as? String {
+            customRepeatNumber = Int(customRepeatNumberString)
+        }
+        
+ 
+        
+        
+        let customRepeatUnitString = aDecoder.decodeObject(forKey: PropertyKey.customRepeatUnit) as? String ?? ""
+        let customRepeatUnit = customRepeatUnitString.isEmpty ? nil :  CustomRepeatUnit(rawValue: customRepeatUnitString)
+        
+        let toDo = aDecoder.decodeBool(forKey: PropertyKey.toDo) as Bool
+        
+        self.init(name: name, type: type, date: date, repeatType: repeatType ?? RepeatType.none, endRepeatDate: endRepeatDate, completedDates: completedDates, repeatFromDate: repeatFromDate, deleteOnCompletion: deleteOnCompletion, customRepeatNumber: customRepeatNumber, customRepeatUnit: customRepeatUnit, toDo: toDo)
     }
 }

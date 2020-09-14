@@ -14,10 +14,13 @@ class DayTableViewController: UITableViewController {
     //MARK: Properties
     
     @IBOutlet weak var homeButton: UIBarButtonItem!
+    
     @IBOutlet weak var rightArrowButton: UIBarButtonItem!
     @IBOutlet weak var leftArrowButton: UIBarButtonItem!
     @IBOutlet weak var rightSpacer: UIBarButtonItem!
     @IBOutlet weak var leftSpacer: UIBarButtonItem!
+    
+    
     var chores = [Chore]()
     var currentChores = [Chore]()
     
@@ -28,47 +31,19 @@ class DayTableViewController: UITableViewController {
     var allView = false
     
     let dateFormatter: DateFormatter = {
-           let formatter = DateFormatter()
-           formatter.dateFormat = "MM/dd/yyyy"
-           return formatter
-       }()
-    var date = Date()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MM/dd/yyyy"
+        return formatter
+    }()
+    var displayDate = getCorrectDate(date: Date())
     
-    @objc func backAction() -> Void {
-       self.dismiss(animated: true, completion: nil)
-    }
-    
-    @objc func rightArrowAction() -> Void {
-        date = Calendar.current.date(byAdding: .day, value: 1, to: date) ?? Date()
-        self.title=dateFormatter.string(for: date)
-        titleButton.setTitle(dateFormatter.string(for: date), for: .normal)
-        setLeftArrowDisabled()
-        reloadChores()
-    }
-    
-    @objc func leftArrowAction() -> Void {
-        date = Calendar.current.date(byAdding: .day, value: -1, to: date) ?? Date()
-        self.title=dateFormatter.string(for: date)
-        titleButton.setTitle(dateFormatter.string(for: date), for: .normal)
-        setLeftArrowDisabled()
-        reloadChores()
-    }
-    
-    func setLeftArrowDisabled() -> Void {
-        if Calendar.current.isDate(getCorrectDate(date: date), inSameDayAs: getCorrectDate(date: Date())) {
-            leftArrowButton.isEnabled = false
-        }
-        else {
-            leftArrowButton.isEnabled = true
-        }
-    }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
+       
+        displayDate = getCorrectDate(date: Date())
         
-        date = getCorrectDate(date: Date())
-        
-        setLeftArrowDisabled()
+        setLeftArrowUsability()
        
         homeButton.action = #selector(backAction)
         homeButton.target = self
@@ -87,7 +62,7 @@ class DayTableViewController: UITableViewController {
                    rightArrowButton.tintColor = UIColor.clear
                }
                else {
-                   setLeftArrowDisabled()
+                   setLeftArrowUsability()
                    leftArrowButton.tintColor = nil
                    
                    rightArrowButton.isEnabled = true
@@ -95,17 +70,23 @@ class DayTableViewController: UITableViewController {
                }
        
         if(todayView) {
-            self.title=dateFormatter.string(for: date)
+            self.title=dateFormatter.string(for: displayDate)
             titleButton.frame = CGRect(x: 0, y:0, width: 100, height: 40)
             titleButton.backgroundColor = .clear
             titleButton.setTitleColor(.black, for: .normal)
-            titleButton.setTitle(dateFormatter.string(for: date), for: .normal)
+            titleButton.setTitle(dateFormatter.string(for: displayDate), for: .normal)
             titleButton.addTarget(self, action: #selector(clickOnTitleButton), for: .touchUpInside)
             navigationItem.titleView = titleButton
           
         }
         else if (unscheduledView) {
-            self.title = "Unscheduled"
+            self.title = "To Do"
+            titleButton.frame = CGRect(x: 0, y:0, width: 100, height: 40)
+            titleButton.backgroundColor = .clear
+            titleButton.setTitleColor(.black, for: .normal)
+            titleButton.setTitle("To Do", for: .normal)
+            titleButton.addTarget(self, action: #selector(clickOnTitleButton), for: .touchUpInside)
+            navigationItem.titleView = titleButton
     
             
         }
@@ -115,18 +96,19 @@ class DayTableViewController: UITableViewController {
         }
         
         
-       reloadChores()
+       updateChores()
         
-       
-        
-        
-       
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        if let selectedIndexPath = tableView.indexPathForSelectedRow {
+            tableView.reloadRows(at: [selectedIndexPath], with: .automatic)
+        }
+
+    }
+    
 
     // MARK: - Table view data source
 
@@ -137,45 +119,31 @@ class DayTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return chores.count
     }
-
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         let cellIdentifier = "ChoreTableViewCell"
         guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? ChoreTableViewCell else {
             fatalError("The dequeued cell is not an instance of ChoreTableViewCell.")
         }
         
         let chore = chores[indexPath.row]
+        
         cell.nameLabel.text = chore.name
-        
-        if (todayView) {
-            cell.isHidden = !isChoreOnDate(chore: chore, date: date)
-        }
-        else if (unscheduledView) {
-            cell.isHidden = (chore.date != nil)
-        }
-        
+        cell.isHidden = shouldHideCell(chore: chore)
         cell.chore = chore
         cell.delegate = self
         
         if chore.repeatType == RepeatType.none {
             cell.skipButton.isHidden = true
         }
-    
-        
 
         return cell
     }
     
-
-    
-    // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
         return true
     }
-    
-
     
     // Override to support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
@@ -184,26 +152,34 @@ class DayTableViewController: UITableViewController {
             chores.remove(at: indexPath.row)
             saveChores()
             tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
+        }
+    }
+    
+    
+    // Override to support rearranging the table view.
+    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
+        let itemToMove = chores[fromIndexPath.row]
+        chores.remove(at: fromIndexPath.row)
+        chores.insert(itemToMove, at: to.row)
     }
     
 
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
+    
     // Override to support conditional rearranging of the table view.
     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         // Return false if you do not want the item to be re-orderable.
         return true
     }
-    */
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+
+        let chore = chores[indexPath.row]
+        
+        let rowHeight:CGFloat = shouldHideCell(chore: chore) ? 0.0 : 55.0
+       
+        return rowHeight
+    }
+    
 
     
     // MARK: - Navigation
@@ -215,16 +191,13 @@ class DayTableViewController: UITableViewController {
         switch(segue.identifier ?? "") {
         case "AddItem":
             os_log("Adding a new chore", log: OSLog.default, type: .debug)
-            let testController = segue.destination as? UINavigationController
-            if testController != nil {
-               for index in (0 ... (testController?.viewControllers.count)! - 1).reversed(){
-                if let previousController = testController?.viewControllers[index] as? CreateChoreViewController {
-                    previousController.displayDate = getCorrectDate(date: date)
+           
+            if let destinationNavigationController = segue.destination as? UINavigationController {
+                for index in (0 ... (destinationNavigationController.viewControllers.count) - 1).reversed(){
+                    if let createChoreController = destinationNavigationController.viewControllers[index] as? CreateChoreViewController {
+                    createChoreController.displayDate = getCorrectDate(date: displayDate)
+                    }
                 }
-                }
-            }
-            if let choreDetailViewController = segue.destination as? CreateChoreViewController {
-                choreDetailViewController.displayDate = getCorrectDate(date: date)
             }
             
         case "ShowDetail":
@@ -233,8 +206,6 @@ class DayTableViewController: UITableViewController {
             }
             guard let selectedChoreCell = sender as? ChoreTableViewCell else {
                 fatalError("Unexpected sender: \(sender)")
-                
-                
             }
             guard let indexPath = tableView.indexPath(for: selectedChoreCell) else {
                 fatalError("The selected cell is not being displayed by the table")
@@ -246,76 +217,44 @@ class DayTableViewController: UITableViewController {
         }
     }
     
-    func reloadChores() {
-        if let savedChores = loadChores() {
-            
-           chores = savedChores
-            for chore in chores {
-                if (chore.date != nil) {
-                    if (Calendar.current.compare(getCorrectDate(date: chore.date!), to: getCorrectDate(date: Date()), toGranularity: Calendar.Component.day) == ComparisonResult.orderedAscending) {
-                                  
-                                  chore.date = getCorrectDate(date: Date())
-                                  print("updated old date")
-                              }
-                }
-          
-                print(chore.name)
-                print(chore.date ?? "NO Date")
-                print(chore.completedDates)
-                print()
-            }
-           tableView.reloadData()
-        }
-        else {
-             loadPresetChores()
-        }
-    }
-    
-    private func loadPresetChores() {
-        let chore1 = Chore(name: "Vaccuum2", type: ChoreType.scheduled, date: Calendar.current.date(byAdding: .day, value: 1, to: Date())!, repeatType: RepeatType.daily, endRepeatDate: nil, repeatFromDate: nil, deleteOnCompletion: false)
-        
-        chores += [chore1]
-    }
-    
-    private func saveChores() {
-       // let isSuccessfulSave = NSKeyedArchiver.archiveRootObject(chores, toFile: Chore.ArchiveURL.path)
-        //let fullPath = getDocumentsDirectory().appendingPathComponent("chores")
-        do {
-            for chore in chores {
-            print("SAVING CHORES")
-            print(chore.name)
-            print(chore.date)
-            print()
-            }
-            let data = try NSKeyedArchiver.archivedData(withRootObject: chores, requiringSecureCoding: false)
-            try data.write(to:Chore.ArchiveURL)
-        } catch {
-            print("error saving chore")
-        }
-        
-        /*
-        if isSuccessfulSave {
-            os_log("Chores successfully saved.", log: OSLog.default, type: .debug)
-        }
-        else {
-            os_log("Failed to save chores.", log: OSLog.default, type: .error)
-        }*/
-    }
+    //MARK: Loading and Saving
     
     private func getDocumentsDirectory() -> URL {
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         return paths[0]
     }
     
-    private func loadChores() -> [Chore]? {
-       // return NSKeyedUnarchiver.unarchiveObject(withFile: Chore.ArchiveURL.path) as? [Chore]
+    private func saveChores() {
         do {
-             let rawData = try Data(contentsOf: getDocumentsDirectory().appendingPathComponent("chores"))
-            print("LOADING CHORES")
-             return try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(rawData) as! [Chore]?
+            let data = try NSKeyedArchiver.archivedData(withRootObject: chores, requiringSecureCoding: false)
+            try data.write(to:Chore.ArchiveURL)
         } catch {
-            print ("error")
+             os_log("Failed to save chores", log: OSLog.default, type: .error)
+        }
+    }
+    
+    private func loadChores() -> [Chore]? {
+        do {
+            let rawData = try Data(contentsOf: getDocumentsDirectory().appendingPathComponent("chores"))
+            return try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(rawData) as! [Chore]?
+        } catch {
+            os_log("Failed to load chores", log: OSLog.default, type: .error)
             return nil
+        }
+    }
+    
+    func updateChores() {
+        if let savedChores = loadChores() {
+            chores = savedChores
+            for chore in chores {
+                if (chore.date != nil) {
+                    if (Calendar.current.compare(getCorrectDate(date: chore.date!), to: getCorrectDate(date: Date()), toGranularity: Calendar.Component.day) == ComparisonResult.orderedAscending) {
+                                  
+                        chore.date = getCorrectDate(date: Date())
+                    }
+                }
+            }
+           tableView.reloadData()
         }
     }
     
@@ -327,69 +266,21 @@ class DayTableViewController: UITableViewController {
             
             if let selectedIndexPath = tableView.indexPathForSelectedRow {
                 chores[selectedIndexPath.row] = chore
-                tableView.reloadData()
-                //Update existing chore
-              //  tableView.reloadRows(at: [selectedIndexPath], with: .none)
-              /*
-                if Calendar.current.isDate(chore.date, inSameDayAs: date) {
-                    
-                    tableView.reloadRows(at: [selectedIndexPath], with: .none)
-                }
-                else {
-                    tableView.reloadData()
-                }
- */
+                tableView.reloadRows(at: [selectedIndexPath], with: .none)
             }
             else {
                 let newIndexPath = IndexPath(row: chores.count, section: 0)
                 chores.append(chore)
                 tableView.insertRows(at: [newIndexPath], with: .automatic)
-                tableView.reloadData()
             }
             saveChores()
         }
     }
     
-    @objc func clickOnTitleButton() {
-        let calendarView = self.storyboard!.instantiateViewController(withIdentifier: "calendarView") as! CalendarViewController
-        calendarView.settings = CalendarSettings()
-        calendarView.tableDate=date
-        calendarView.setTableDate=true
-        calendarView.setScheduleButton=false
-        calendarView.setEndRepeatButton=false
-        self.navigationController?.pushViewController(calendarView, animated:   true)
-    }
+   
     
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-
-        var rowHeight:CGFloat = 55.0
-
-        let chore = chores[indexPath.row]
-       
-        if(todayView) {
-            if !isChoreOnDate(chore: chore, date: date){
-                rowHeight = 0.0
-            }
-        }
-        else if (unscheduledView) {
-            if chore.date != nil {
-                rowHeight = 0.0
-            }
-        }
-        
-        return rowHeight
-    }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        if let selectedIndexPath = tableView.indexPathForSelectedRow {
-            // chores[selectedIndexPath.row] = chore
-            tableView.reloadRows(at: [selectedIndexPath], with: .automatic)
-
-        }
-
-    }
+    
     
     private func isChoreOnDate(chore: Chore, date: Date) -> Bool{
         if (chore.date == nil) {
@@ -582,6 +473,76 @@ extension DayTableViewController : ChoreTableViewCellDelegate {
             }
             saveChores()
         }
+    }
+    
+    //MARK: Objc functions
+    
+    @objc func backAction() -> Void {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    @objc func rightArrowAction() -> Void {
+        displayDate = Calendar.current.date(byAdding: .day, value: 1, to: displayDate) ?? displayDate
+        self.title=dateFormatter.string(for: displayDate)
+        titleButton.setTitle(dateFormatter.string(for: displayDate), for: .normal)
+        setLeftArrowUsability()
+        tableView.reloadData()
+    }
+       
+    @objc func leftArrowAction() -> Void {
+        displayDate = Calendar.current.date(byAdding: .day, value: -1, to: displayDate) ?? displayDate
+        self.title=dateFormatter.string(for: displayDate)
+        titleButton.setTitle(dateFormatter.string(for: displayDate), for: .normal)
+        setLeftArrowUsability()
+        tableView.reloadData()
+    }
+    
+    @objc func clickOnTitleButton() {
+           if (todayView) {
+               let calendarView = self.storyboard!.instantiateViewController(withIdentifier: "calendarView") as! CalendarViewController
+               calendarView.settings = CalendarSettings()
+               calendarView.tableDate=displayDate
+               calendarView.setTableDate=true
+               calendarView.setScheduleButton=false
+               calendarView.setEndRepeatButton=false
+               self.navigationController?.pushViewController(calendarView, animated:   true)
+           }
+           else if (unscheduledView) {
+               self.title = (self.title == "To Do") ? "Saved" : "To Do"
+               titleButton.setTitle(self.title, for: .normal)
+               tableView.reloadData()
+           }
+           
+       }
+    
+    //MARK: Private functions
+    
+    private func setLeftArrowUsability() -> Void {
+        if Calendar.current.isDate(getCorrectDate(date: displayDate), inSameDayAs: getCorrectDate(date: Date())) {
+            leftArrowButton.isEnabled = false
+        }
+        else {
+            leftArrowButton.isEnabled = true
+        }
+    }
+    
+    private func shouldHideCell(chore: Chore) -> Bool {
+        var shouldHide = false
+        if (todayView) {
+            shouldHide = !isChoreOnDate(chore: chore, date: displayDate)
+        }
+        else if (unscheduledView) {
+            if (chore.date != nil) {
+                shouldHide = true
+            }
+            else if (self.title == "To Do" && !chore.toDo) {
+                shouldHide = true
+            }
+            else if (self.title == "Saved" && chore.toDo) {
+                shouldHide = true
+            }
+        }
+        return shouldHide
     }
 }
 

@@ -21,4 +21,12 @@ enum RepeatType: String, CaseIterable {
     case monthly = "Montly"
     case bimonthly = "BiMonthly"
     case yearly = "Yearly"
+    case custom = "Custom"
+}
+
+enum CustomRepeatUnit: String, CaseIterable {
+    case days = "Day(s)"
+    case weeks = "Week(s)"
+    case months = "Month(s)"
+    case years = "Year(s)"
 }

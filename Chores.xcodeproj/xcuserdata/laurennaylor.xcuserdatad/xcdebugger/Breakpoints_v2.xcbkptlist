@@ -14,9 +14,9 @@
             filePath = "Chores/DayTableViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "400"
-            endingLineNumber = "400"
-            landmarkName = "isChoreOnDate(chore:date:)"
+            startingLineNumber = "291"
+            endingLineNumber = "291"
+            landmarkName = "clickOnTitleButton()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
