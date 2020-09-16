@@ -221,6 +221,14 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="G4U-2T-RkN">
+                                <rect key="frame" x="64" y="588" width="46" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <connections>
+                                    <action selector="showHistorySettings:" destination="1ym-dK-VYk" eventType="touchUpInside" id="ktZ-Er-RcV"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <viewLayoutGuide key="safeArea" id="7f8-Fw-2xr"/>
@@ -251,6 +259,7 @@
                         <outlet property="repeatLabel" destination="Jrh-O1-qo8" id="gyi-pi-1zG"/>
                         <outlet property="repeatPicker" destination="8ib-9W-UvL" id="eSK-Ky-vdd"/>
                         <outlet property="saveButton" destination="KhV-bq-mA4" id="vdp-dH-XUH"/>
+                        <outlet property="saveHistorySettingsButton" destination="G4U-2T-RkN" id="cPI-Ka-kKK"/>
                         <outlet property="toDoSegment" destination="HCn-G1-BFV" id="s4d-K5-Egz"/>
                     </connections>
                 </viewController>

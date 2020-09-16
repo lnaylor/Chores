@@ -34,7 +34,10 @@ class CreateChoreViewController: UIViewController, UITextFieldDelegate, UIPicker
     @IBOutlet weak var deleteOnCompletionSwitch: UISwitch!
     @IBOutlet weak var toDoSegment: UISegmentedControl!
     
+    var historyPickerView: UIPickerView!
     
+    
+    @IBOutlet weak var saveHistorySettingsButton: UIButton!
     @IBOutlet weak var repeatLabel: UILabel!
     @IBOutlet weak var endRepeatLabel: UILabel!
     @IBOutlet weak var pushBackLabel: UILabel!
@@ -64,6 +67,26 @@ class CreateChoreViewController: UIViewController, UITextFieldDelegate, UIPicker
         return formatter
     }()
 
+    
+    @IBAction func showHistorySettings(_ sender: Any) {
+        let alert = UIAlertController(title: "Car Choices", message: "\n\n\n\n\n\n", preferredStyle: .alert)
+               alert.isModalInPopover = true
+               
+               historyPickerView = UIPickerView(frame: CGRect(x: 5, y: 20, width: 250, height: 140))
+               
+               alert.view.addSubview(historyPickerView)
+               historyPickerView.dataSource = self
+               historyPickerView.delegate = self
+               
+               alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+               alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (UIAlertAction) in
+                   
+                   print("You selected " )
+               
+               }))
+               self.present(alert,animated: true, completion: nil )
+    }
+    
     
     override func viewWillAppear(_ animated: Bool) {
         if (chore != nil) && !displayDateSetFromCalendar {
@@ -239,9 +262,7 @@ class CreateChoreViewController: UIViewController, UITextFieldDelegate, UIPicker
     }
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        print("PICKER VIEW")
-        print(pickerView === repeatPicker)
-        if (pickerView === repeatPicker) {
+        if (pickerView === repeatPicker || pickerView === historyPickerView) {
             return 1
         }
         return 2
