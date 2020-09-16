@@ -277,68 +277,168 @@ class DayTableViewController: UITableViewController {
         }
     }
     
+   //MARK: Private functions
    
+   private func setLeftArrowUsability() -> Void {
+       if Calendar.current.isDate(getCorrectDate(date: displayDate), inSameDayAs: getCorrectDate(date: Date())) {
+           leftArrowButton.isEnabled = false
+       }
+       else {
+           leftArrowButton.isEnabled = true
+       }
+   }
+   
+   private func shouldHideCell(chore: Chore) -> Bool {
+       var shouldHide = false
+       if (todayView) {
+           shouldHide = !isChoreOnDate(chore: chore, date: displayDate)
+       }
+       else if (unscheduledView) {
+           if (chore.date != nil) {
+               shouldHide = true
+           }
+           else if (self.title == "To Do" && !chore.toDo) {
+               shouldHide = true
+           }
+           else if (self.title == "Saved" && chore.toDo) {
+               shouldHide = true
+           }
+       }
+       return shouldHide
+   }
     
-    
-    
+    private func addRepeatAmountToChore(chore: Chore) -> Date? {
+        var date: Date
+        if (chore.repeatFromDate != nil) {
+            date = chore.repeatFromDate!
+        }
+        else if (chore.date != nil){
+            date = chore.date!
+        }
+        else {
+            return nil
+        }
+        if (chore.repeatType == RepeatType.none) {
+            return nil
+        }
+        let d = addRepeatAmountToDate(date: date, repeatType: chore.repeatType, customRepeatNumber: chore.customRepeatNumber, customRepeatUnit: chore.customRepeatUnit)
+        
+        if (chore.endRepeatDate != nil && d != nil) {
+            if (Calendar.current.compare(d!, to: chore.endRepeatDate!, toGranularity: Calendar.Component.day) == ComparisonResult.orderedDescending) {
+                return nil
+            }
+        }
+        return d
+    }
+
+    private func addRepeatAmountToDate(date: Date, repeatType: RepeatType, customRepeatNumber: Int?, customRepeatUnit: CustomRepeatUnit?) -> Date? {
+        var d: Date?
+        switch repeatType {
+        case RepeatType.none:
+            return nil
+        case RepeatType.daily:
+            d = Calendar.current.date(byAdding: .day, value: 1, to: date)
+        case RepeatType.weekly:
+            d = Calendar.current.date(byAdding: .day, value: 7, to: date)
+        case RepeatType.biweekly:
+            d = Calendar.current.date(byAdding: .day, value: 14, to: date)
+        case RepeatType.monthly:
+            d = Calendar.current.date(byAdding: .month, value: 1, to: date)
+        case RepeatType.bimonthly:
+            d = Calendar.current.date(byAdding: .month, value: 2, to: date)
+        case RepeatType.yearly:
+            d = Calendar.current.date(byAdding: .year, value: 1, to: date)
+        case RepeatType.custom:
+            if (customRepeatNumber != nil && customRepeatNumber ?? -1 > 0 && customRepeatUnit != nil) {
+                let numUnits = customRepeatNumber
+                switch customRepeatUnit! {
+                case CustomRepeatUnit.days:
+                    d = Calendar.current.date(byAdding: .day, value: numUnits!, to: date) ?? date
+                case CustomRepeatUnit.weeks:
+                    d = Calendar.current.date(byAdding: .day, value: numUnits! * 7, to: date) ?? date
+                case CustomRepeatUnit.months:
+                    d = Calendar.current.date(byAdding: .month, value: numUnits!, to: date) ?? date
+                case CustomRepeatUnit.years:
+                    d = Calendar.current.date(byAdding: .year, value: numUnits!, to: date) ?? date
+                }
+            }
+        }
+        return d
+    }
     
     private func isChoreOnDate(chore: Chore, date: Date) -> Bool{
         if (chore.date == nil) {
             return false
         }
-        if !Calendar.current.isDate(chore.date!, inSameDayAs: date) {
-            let repeatType = chore.repeatType
-            if repeatType != RepeatType.none {
-                var d : Date
-                if (chore.repeatFromDate != nil) {
-                    d = chore.repeatFromDate!
-                }
-                else {
-                    d = chore.date!
-                }
-                print("IS CHORE ON DATE")
-                print(d)
-                print(date)
-                print(chore.repeatFromDate)
-                while (Calendar.current.compare(d, to: date, toGranularity: Calendar.Component.day) == ComparisonResult.orderedAscending || Calendar.current.isDate(d, inSameDayAs: date)) {
-                    
-                    if let endD = chore.endRepeatDate {
-                        if Calendar.current.compare(d, to: endD, toGranularity: Calendar.Component.day) == ComparisonResult.orderedDescending {
-                            print("FALSE1")
-                            return false
-                        }
-                    }
-            
-                    if Calendar.current.isDate(d, inSameDayAs: date) {
-                        print(d)
-                        print(date)
-                        return true
-                    }
-                    
-                    switch repeatType {
-                    case RepeatType.daily:
-                        d = Calendar.current.date(byAdding: .day, value: 1, to: d) ?? date
-                    case RepeatType.weekly:
-                        d = Calendar.current.date(byAdding: .day, value: 7, to: d) ?? date
-                    case RepeatType.biweekly:
-                        d = Calendar.current.date(byAdding: .day, value: 14, to: d) ?? date
-                    case RepeatType.monthly:
-                        d = Calendar.current.date(byAdding: .month, value: 1, to: d) ?? date
-                    case RepeatType.bimonthly:
-                        d = Calendar.current.date(byAdding: .month, value: 2, to: d) ?? date
-                    case RepeatType.yearly:
-                        d = Calendar.current.date(byAdding: .year, value: 1, to: d) ?? date
-                    default:
-                        d = date
-                    }
-                    
-                }
-                
-            }
+        if (Calendar.current.compare(chore.date!, to: date, toGranularity: Calendar.Component.day) == ComparisonResult.orderedDescending) {
             return false
         }
-        return true
+        var d = chore.date
+        while (d != nil) {
+            if (isDateGreaterThan(date1: d!, date2: date)) {
+                return false
+            }
+            if Calendar.current.isDate(d!, inSameDayAs: date) {
+                return true
+            }
+            d = addRepeatAmountToDate(date: d!, repeatType: chore.repeatType, customRepeatNumber: chore.customRepeatNumber, customRepeatUnit: chore.customRepeatUnit)
+            if (chore.endRepeatDate != nil) {
+                if (isDateGreaterThan(date1: d!, date2: chore.endRepeatDate!)) {
+                    return false
+                }
+            }
+        }
+
+        return false
     }
+    
+    
+    private func updateChoreDate(chore: Chore) {
+        chore.date = addRepeatAmountToChore(chore: chore)
+        saveChores()
+    }
+    
+    
+    //MARK: Objc functions
+       
+    @objc func backAction() -> Void {
+        self.dismiss(animated: true, completion: nil)
+    }
+       
+    @objc func rightArrowAction() -> Void {
+        displayDate = Calendar.current.date(byAdding: .day, value: 1, to: displayDate) ?? displayDate
+        self.title=dateFormatter.string(for: displayDate)
+        titleButton.setTitle(dateFormatter.string(for: displayDate), for: .normal)
+        setLeftArrowUsability()
+        tableView.reloadData()
+    }
+          
+    @objc func leftArrowAction() -> Void {
+        displayDate = Calendar.current.date(byAdding: .day, value: -1, to: displayDate) ?? displayDate
+        self.title=dateFormatter.string(for: displayDate)
+        titleButton.setTitle(dateFormatter.string(for: displayDate), for: .normal)
+        setLeftArrowUsability()
+        tableView.reloadData()
+    }
+       
+    @objc func clickOnTitleButton() {
+        if (todayView) {
+            let calendarView = self.storyboard!.instantiateViewController(withIdentifier: "calendarView") as! CalendarViewController
+            calendarView.settings = CalendarSettings()
+            calendarView.tableDate=displayDate
+            calendarView.setTableDate=true
+            calendarView.setScheduleButton=false
+            calendarView.setEndRepeatButton=false
+            self.navigationController?.pushViewController(calendarView, animated:   true)
+        }
+        else if (unscheduledView) {
+            self.title = (self.title == "To Do") ? "Saved" : "To Do"
+            titleButton.setTitle(self.title, for: .normal)
+            tableView.reloadData()
+        }
+              
+    }
+       
 
 }
 
@@ -375,25 +475,13 @@ extension DayTableViewController : ChoreTableViewCellDelegate {
             if let days = alert.textFields?.first?.text {
                 chore.date = Calendar.current.date(byAdding: .day, value: Int(days) ?? 1, to: chore.date!)
                 if (chore.repeatFromDate != nil) {
-                    var d : Date?
-                    switch chore.repeatType {
-                    case RepeatType.daily:
-                        d = Calendar.current.date(byAdding: .day, value: 1, to: chore.repeatFromDate!)
-                    case RepeatType.weekly:
-                        d = Calendar.current.date(byAdding: .day, value: 7, to: chore.repeatFromDate!)
-                    case RepeatType.biweekly:
-                        d = Calendar.current.date(byAdding: .day, value: 14, to: chore.repeatFromDate!)
-                    case RepeatType.monthly:
-                        d = Calendar.current.date(byAdding: .month, value: 1, to: chore.repeatFromDate!)
-                    case RepeatType.bimonthly:
-                        d = Calendar.current.date(byAdding: .month, value: 2, to: chore.repeatFromDate!)
-                    case RepeatType.yearly:
-                        d = Calendar.current.date(byAdding: .year, value: 1, to: chore.repeatFromDate!)
-                    default:
-                        d = nil
+                    var d = chore.repeatFromDate
+                    while (isDateGreaterThan(date1: chore.date!, date2: chore.repeatFromDate!)) {
+                        chore.repeatFromDate = d
+                        d = self.addRepeatAmountToDate(date: d!, repeatType: chore.repeatType, customRepeatNumber: chore.customRepeatNumber, customRepeatUnit: chore.customRepeatUnit)
                     }
-                    chore.repeatFromDate = d
                 }
+               
                 self.saveChores()
                 self.tableView.reloadData()
             }
@@ -421,128 +509,19 @@ extension DayTableViewController : ChoreTableViewCellDelegate {
     }
     
     func choreHistoryButtonCell(_ choreTableViewCell: ChoreTableViewCell, chore: Chore) {
-    let calendarView = self.storyboard!.instantiateViewController(withIdentifier: "calendarView") as! CalendarViewController
+        let calendarView = self.storyboard!.instantiateViewController(withIdentifier: "calendarView") as! CalendarViewController
+        
         let settings = CalendarSettings()
         settings.selectionType = .none
-           calendarView.settings = settings
-           calendarView.setTableDate=false
-           calendarView.setScheduleButton=false
-           calendarView.setEndRepeatButton=false
+        calendarView.settings = settings
+        
+        calendarView.setTableDate=false
+        calendarView.setScheduleButton=false
+        calendarView.setEndRepeatButton=false
         calendarView.showHistory=true
         calendarView.completedDates = chore.completedDates
-           self.navigationController?.pushViewController(calendarView, animated:   true)
+        self.navigationController?.pushViewController(calendarView, animated:   true)
     }
     
-    private func updateChoreDate(chore: Chore) {
-        if (chore.date != nil) {
-            if (chore.repeatType != RepeatType.none) {
-                var d : Date?
-                var choreDate : Date?
-                if (chore.repeatFromDate != nil) {
-                    choreDate = chore.repeatFromDate!
-                }
-                else {
-                    choreDate = chore.date!
-                }
-                switch chore.repeatType {
-                case RepeatType.daily:
-                    d = Calendar.current.date(byAdding: .day, value: 1, to: choreDate!)
-                case RepeatType.weekly:
-                    d = Calendar.current.date(byAdding: .day, value: 7, to: choreDate!)
-                case RepeatType.biweekly:
-                    d = Calendar.current.date(byAdding: .day, value: 14, to: choreDate!)
-                case RepeatType.monthly:
-                    d = Calendar.current.date(byAdding: .month, value: 1, to: choreDate!)
-                case RepeatType.bimonthly:
-                    d = Calendar.current.date(byAdding: .month, value: 2, to: choreDate!)
-                case RepeatType.yearly:
-                    d = Calendar.current.date(byAdding: .year, value: 1, to: choreDate!)
-                default:
-                    d = nil
-                }
-                
-                if (chore.endRepeatDate != nil && d != nil) {
-                    if Calendar.current.compare(d!, to: chore.endRepeatDate!, toGranularity: Calendar.Component.day) == ComparisonResult.orderedDescending {
-                        d = nil
-                    }
-                }
-                chore.date = d
-            }
-            else {
-                chore.date = nil
-            }
-            saveChores()
-        }
-    }
-    
-    //MARK: Objc functions
-    
-    @objc func backAction() -> Void {
-        self.dismiss(animated: true, completion: nil)
-    }
-    
-    @objc func rightArrowAction() -> Void {
-        displayDate = Calendar.current.date(byAdding: .day, value: 1, to: displayDate) ?? displayDate
-        self.title=dateFormatter.string(for: displayDate)
-        titleButton.setTitle(dateFormatter.string(for: displayDate), for: .normal)
-        setLeftArrowUsability()
-        tableView.reloadData()
-    }
-       
-    @objc func leftArrowAction() -> Void {
-        displayDate = Calendar.current.date(byAdding: .day, value: -1, to: displayDate) ?? displayDate
-        self.title=dateFormatter.string(for: displayDate)
-        titleButton.setTitle(dateFormatter.string(for: displayDate), for: .normal)
-        setLeftArrowUsability()
-        tableView.reloadData()
-    }
-    
-    @objc func clickOnTitleButton() {
-           if (todayView) {
-               let calendarView = self.storyboard!.instantiateViewController(withIdentifier: "calendarView") as! CalendarViewController
-               calendarView.settings = CalendarSettings()
-               calendarView.tableDate=displayDate
-               calendarView.setTableDate=true
-               calendarView.setScheduleButton=false
-               calendarView.setEndRepeatButton=false
-               self.navigationController?.pushViewController(calendarView, animated:   true)
-           }
-           else if (unscheduledView) {
-               self.title = (self.title == "To Do") ? "Saved" : "To Do"
-               titleButton.setTitle(self.title, for: .normal)
-               tableView.reloadData()
-           }
-           
-       }
-    
-    //MARK: Private functions
-    
-    private func setLeftArrowUsability() -> Void {
-        if Calendar.current.isDate(getCorrectDate(date: displayDate), inSameDayAs: getCorrectDate(date: Date())) {
-            leftArrowButton.isEnabled = false
-        }
-        else {
-            leftArrowButton.isEnabled = true
-        }
-    }
-    
-    private func shouldHideCell(chore: Chore) -> Bool {
-        var shouldHide = false
-        if (todayView) {
-            shouldHide = !isChoreOnDate(chore: chore, date: displayDate)
-        }
-        else if (unscheduledView) {
-            if (chore.date != nil) {
-                shouldHide = true
-            }
-            else if (self.title == "To Do" && !chore.toDo) {
-                shouldHide = true
-            }
-            else if (self.title == "Saved" && chore.toDo) {
-                shouldHide = true
-            }
-        }
-        return shouldHide
-    }
 }
 
