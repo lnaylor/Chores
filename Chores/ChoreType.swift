@@ -24,7 +24,7 @@ enum RepeatType: String, CaseIterable {
     case custom = "Custom"
 }
 
-enum CustomRepeatUnit: String, CaseIterable {
+enum TimeUnit: String, CaseIterable {
     case days = "Day(s)"
     case weeks = "Week(s)"
     case months = "Month(s)"

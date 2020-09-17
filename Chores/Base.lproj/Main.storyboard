@@ -153,14 +153,14 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="End Repeat:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LtF-by-MAt">
-                                <rect key="frame" x="20" y="664" width="180" height="39"/>
+                                <rect key="frame" x="8" y="490" width="180" height="39"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Push back repeat if delayed:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Eza-bG-Gc1">
-                                <rect key="frame" x="20" y="711" width="217" height="39"/>
+                                <rect key="frame" x="20" y="557" width="217" height="39"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
@@ -174,38 +174,35 @@
                                     <segue destination="bup-LD-zap" kind="show" id="3KX-TY-xNv"/>
                                 </connections>
                             </button>
-                            <pickerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8ib-9W-UvL">
-                                <rect key="frame" x="188" y="266" width="206" height="225"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                            </pickerView>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ckt-I3-RMC">
-                                <rect key="frame" x="208" y="664" width="104" height="35"/>
+                                <rect key="frame" x="220" y="490" width="104" height="35"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button"/>
                                 <connections>
                                     <segue destination="bup-LD-zap" kind="show" id="RQf-e5-fpD"/>
                                 </connections>
                             </button>
-                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ndu-ev-51h">
-                                <rect key="frame" x="320" y="664" width="49" height="31"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            </switch>
                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="af1-To-1fp">
-                                <rect key="frame" x="245" y="715" width="49" height="31"/>
+                                <rect key="frame" x="332" y="557" width="49" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <connections>
+                                    <action selector="pushBackRepeatSwitchAction:" destination="1ym-dK-VYk" eventType="valueChanged" id="wYc-zl-7hM"/>
+                                </connections>
                             </switch>
                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eBe-KE-c5F">
                                 <rect key="frame" x="209" y="212" width="49" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <connections>
+                                    <action selector="notScheduledSwitchAction:" destination="1ym-dK-VYk" eventType="valueChanged" id="aYX-8j-3qz"/>
+                                </connections>
                             </switch>
                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fSH-sV-lCE">
                                 <rect key="frame" x="208" y="119" width="49" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <connections>
+                                    <action selector="deleteOnCompletionSwitchAction:" destination="1ym-dK-VYk" eventType="valueChanged" id="dEa-Nd-MBv"/>
+                                </connections>
                             </switch>
-                            <pickerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YRq-vo-fpC">
-                                <rect key="frame" x="188" y="431" width="206" height="216"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                            </pickerView>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="HCn-G1-BFV">
                                 <rect key="frame" x="273" y="212" width="113" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -215,20 +212,43 @@
                                 </segments>
                             </segmentedControl>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Repeat Every: " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g38-XU-3HQ">
-                                <rect key="frame" x="28" y="519" width="118" height="41"/>
+                                <rect key="frame" x="39" y="423" width="118" height="41"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="G4U-2T-RkN">
-                                <rect key="frame" x="64" y="588" width="46" height="30"/>
+                                <rect key="frame" x="20" y="687" width="119" height="59"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Button"/>
+                                <state key="normal" title="History Retention"/>
                                 <connections>
                                     <action selector="showHistorySettings:" destination="1ym-dK-VYk" eventType="touchUpInside" id="ktZ-Er-RcV"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eLP-gb-KN7">
+                                <rect key="frame" x="245" y="353" width="116" height="45"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <connections>
+                                    <action selector="showRepeatOptions:" destination="1ym-dK-VYk" eventType="touchUpInside" id="vge-2a-dFq"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uHt-dl-LK9">
+                                <rect key="frame" x="253" y="413" width="101" height="41"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <connections>
+                                    <action selector="showCustomRepeatOptions:" destination="1ym-dK-VYk" eventType="touchUpInside" id="wo9-0F-quY"/>
+                                </connections>
+                            </button>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ndu-ev-51h">
+                                <rect key="frame" x="332" y="490" width="49" height="31"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <connections>
+                                    <action selector="endRepeatSwitchAction:" destination="1ym-dK-VYk" eventType="valueChanged" id="BZL-XI-cIY"/>
+                                </connections>
+                            </switch>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <viewLayoutGuide key="safeArea" id="7f8-Fw-2xr"/>
@@ -247,7 +267,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="calendarButton" destination="8Y6-E5-PDj" id="s3t-eS-x78"/>
-                        <outlet property="customRepeatPicker" destination="YRq-vo-fpC" id="Jes-b9-FEY"/>
+                        <outlet property="customRepeatScheduleButton" destination="uHt-dl-LK9" id="Bay-Vp-2k2"/>
                         <outlet property="deleteOnCompletionSwitch" destination="fSH-sV-lCE" id="s8s-gG-2nm"/>
                         <outlet property="endRepeatButton" destination="ckt-I3-RMC" id="bf9-Im-KVO"/>
                         <outlet property="endRepeatLabel" destination="LtF-by-MAt" id="YfL-A9-mMT"/>
@@ -257,7 +277,7 @@
                         <outlet property="pushBackLabel" destination="Eza-bG-Gc1" id="zv7-S2-kkL"/>
                         <outlet property="pushBackRepeatSwitch" destination="af1-To-1fp" id="YoA-eg-eDg"/>
                         <outlet property="repeatLabel" destination="Jrh-O1-qo8" id="gyi-pi-1zG"/>
-                        <outlet property="repeatPicker" destination="8ib-9W-UvL" id="eSK-Ky-vdd"/>
+                        <outlet property="repeatScheduleButton" destination="eLP-gb-KN7" id="g6r-WT-g5B"/>
                         <outlet property="saveButton" destination="KhV-bq-mA4" id="vdp-dH-XUH"/>
                         <outlet property="saveHistorySettingsButton" destination="G4U-2T-RkN" id="cPI-Ka-kKK"/>
                         <outlet property="toDoSegment" destination="HCn-G1-BFV" id="s4d-K5-Egz"/>

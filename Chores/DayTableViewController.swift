@@ -331,7 +331,7 @@ class DayTableViewController: UITableViewController {
         return d
     }
 
-    private func addRepeatAmountToDate(date: Date, repeatType: RepeatType, customRepeatNumber: Int?, customRepeatUnit: CustomRepeatUnit?) -> Date? {
+    private func addRepeatAmountToDate(date: Date, repeatType: RepeatType, customRepeatNumber: Int?, customRepeatUnit: TimeUnit?) -> Date? {
         var d: Date?
         switch repeatType {
         case RepeatType.none:
@@ -352,13 +352,13 @@ class DayTableViewController: UITableViewController {
             if (customRepeatNumber != nil && customRepeatNumber ?? -1 > 0 && customRepeatUnit != nil) {
                 let numUnits = customRepeatNumber
                 switch customRepeatUnit! {
-                case CustomRepeatUnit.days:
+                case TimeUnit.days:
                     d = Calendar.current.date(byAdding: .day, value: numUnits!, to: date) ?? date
-                case CustomRepeatUnit.weeks:
+                case TimeUnit.weeks:
                     d = Calendar.current.date(byAdding: .day, value: numUnits! * 7, to: date) ?? date
-                case CustomRepeatUnit.months:
+                case TimeUnit.months:
                     d = Calendar.current.date(byAdding: .month, value: numUnits!, to: date) ?? date
-                case CustomRepeatUnit.years:
+                case TimeUnit.years:
                     d = Calendar.current.date(byAdding: .year, value: numUnits!, to: date) ?? date
                 }
             }
@@ -513,6 +513,20 @@ extension DayTableViewController : ChoreTableViewCellDelegate {
         
         let settings = CalendarSettings()
         settings.selectionType = .none
+        
+        var d: Date
+        switch chore.historyRetentionUnit {
+        case TimeUnit.days:
+            d = Calendar.current.date(byAdding: .day, value: -1*chore.historyRetentionNumber, to: Date()) ?? Date()
+        case TimeUnit.weeks:
+            d = Calendar.current.date(byAdding: .day, value: -7*chore.historyRetentionNumber, to: Date()) ?? Date()
+        case TimeUnit.months:
+            d = Calendar.current.date(byAdding: .month, value: -1*chore.historyRetentionNumber, to: Date()) ?? Date()
+        case TimeUnit.years:
+            d = Calendar.current.date(byAdding: .year, value: -1*chore.historyRetentionNumber, to: Date()) ?? Date()
+        }
+        settings.startDate=d
+        settings.endDate=getCorrectDate(date: Date())
         calendarView.settings = settings
         
         calendarView.setTableDate=false

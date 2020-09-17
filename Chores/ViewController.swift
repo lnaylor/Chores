@@ -8,6 +8,27 @@
 
 import UIKit
 
+class CalendarSettings {
+    var gridType: CalendarType = .threeOnFour
+    var scrollDirection: ScrollDirection = .vertical
+    var startDate = Calendar.current.date(byAdding: .year, value: -3, to: Date())!
+    var endDate = Calendar.current.date(byAdding: .year, value: 3, to: Date())!
+    var isPagingEnabled: Bool = false
+    var showDaysOut: Bool = true
+    var selectionType: SelectionType = .one
+    var date: Date = Date()
+}
+
+let dateFormatter: DateFormatter = {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "MM/dd/yyyy"
+    return formatter
+}()
+
+func getDateString(date: Date) -> String {
+    return dateFormatter.string(for: date) ?? ""
+}
+
 func getCorrectDate(date: Date) -> Date {
        let formatter = DateFormatter()
        formatter.dateFormat = "MM/dd/yyyy"

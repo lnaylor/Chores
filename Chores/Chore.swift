@@ -22,8 +22,10 @@ class Chore: NSObject, NSCoding {
     var repeatFromDate: Date?
     var deleteOnCompletion: Bool
     var customRepeatNumber: Int?
-    var customRepeatUnit: CustomRepeatUnit?
+    var customRepeatUnit: TimeUnit?
     var toDo: Bool
+    var historyRetentionNumber: Int
+    var historyRetentionUnit: TimeUnit
     
     //MARK: Archiving Paths
     
@@ -44,9 +46,11 @@ class Chore: NSObject, NSCoding {
         static let customRepeatNumber = "customRepeatNumber"
         static let customRepeatUnit = "customRepeatUnit"
         static let toDo = "toDo"
+        static let historyRetentionNumber = "historyRetentionNumber"
+        static let historyRetentionUnit = "historyRetentionUnit"
     }
     
-    init(name: String, type: ChoreType, date: Date?, repeatType: RepeatType, endRepeatDate: Date?, repeatFromDate: Date?, deleteOnCompletion: Bool, customRepeatNumber: Int?, customRepeatUnit: CustomRepeatUnit?, toDo: Bool) {
+    init(name: String, type: ChoreType, date: Date?, repeatType: RepeatType, endRepeatDate: Date?, repeatFromDate: Date?, deleteOnCompletion: Bool, customRepeatNumber: Int?, customRepeatUnit: TimeUnit?, toDo: Bool, historyRetentionNumber: Int, historyRetentionUnit: TimeUnit) {
         self.name=name
         self.type=type
         self.date=date
@@ -57,10 +61,12 @@ class Chore: NSObject, NSCoding {
         self.deleteOnCompletion=deleteOnCompletion
         self.customRepeatNumber=customRepeatNumber
         self.customRepeatUnit = customRepeatUnit
+        self.historyRetentionNumber=historyRetentionNumber
+        self.historyRetentionUnit=historyRetentionUnit
         self.toDo = toDo
     }
     
-    init(name: String, type: ChoreType, date: Date?, repeatType: RepeatType, endRepeatDate: Date?, completedDates: [Date], repeatFromDate: Date?, deleteOnCompletion: Bool, customRepeatNumber: Int?, customRepeatUnit: CustomRepeatUnit?, toDo: Bool) {
+    init(name: String, type: ChoreType, date: Date?, repeatType: RepeatType, endRepeatDate: Date?, completedDates: [Date], repeatFromDate: Date?, deleteOnCompletion: Bool, customRepeatNumber: Int?, customRepeatUnit: TimeUnit?, toDo: Bool, historyRetentionNumber: Int, historyRetentionUnit: TimeUnit) {
         self.name=name
         self.type=type
         self.date=date
@@ -71,6 +77,8 @@ class Chore: NSObject, NSCoding {
         self.deleteOnCompletion=deleteOnCompletion
         self.customRepeatNumber=customRepeatNumber
         self.customRepeatUnit = customRepeatUnit
+        self.historyRetentionNumber=historyRetentionNumber
+        self.historyRetentionUnit=historyRetentionUnit
         self.toDo = toDo
     }
     
@@ -86,8 +94,10 @@ class Chore: NSObject, NSCoding {
         aCoder.encode(repeatFromDate, forKey: PropertyKey.repeatFromDate)
         aCoder.encode(deleteOnCompletion, forKey: PropertyKey.deleteOnCompletion)
         aCoder.encode(customRepeatNumber, forKey: PropertyKey.customRepeatNumber)
-        aCoder.encode(customRepeatUnit, forKey: PropertyKey.customRepeatUnit)
+        aCoder.encode(customRepeatUnit?.rawValue, forKey: PropertyKey.customRepeatUnit)
         aCoder.encode(toDo, forKey: PropertyKey.toDo)
+        aCoder.encode(historyRetentionNumber, forKey: PropertyKey.historyRetentionNumber)
+        aCoder.encode(historyRetentionUnit.rawValue, forKey: PropertyKey.historyRetentionUnit)
     }
     
     required convenience init?(coder aDecoder: NSCoder) {
@@ -129,10 +139,14 @@ class Chore: NSObject, NSCoding {
         
         
         let customRepeatUnitString = aDecoder.decodeObject(forKey: PropertyKey.customRepeatUnit) as? String ?? ""
-        let customRepeatUnit = customRepeatUnitString.isEmpty ? nil :  CustomRepeatUnit(rawValue: customRepeatUnitString)
+        let customRepeatUnit = customRepeatUnitString.isEmpty ? nil :  TimeUnit(rawValue: customRepeatUnitString)
         
         let toDo = aDecoder.decodeBool(forKey: PropertyKey.toDo) as Bool
         
-        self.init(name: name, type: type, date: date, repeatType: repeatType ?? RepeatType.none, endRepeatDate: endRepeatDate, completedDates: completedDates, repeatFromDate: repeatFromDate, deleteOnCompletion: deleteOnCompletion, customRepeatNumber: customRepeatNumber, customRepeatUnit: customRepeatUnit, toDo: toDo)
+        let historyRetentionNumber = aDecoder.decodeInteger(forKey: PropertyKey.historyRetentionNumber)
+        
+        let historyRetentionUnit = TimeUnit(rawValue: aDecoder.decodeObject(forKey: PropertyKey.historyRetentionUnit) as? String ?? TimeUnit.days.rawValue) ?? TimeUnit.days
+        
+        self.init(name: name, type: type, date: date, repeatType: repeatType ?? RepeatType.none, endRepeatDate: endRepeatDate, completedDates: completedDates, repeatFromDate: repeatFromDate, deleteOnCompletion: deleteOnCompletion, customRepeatNumber: customRepeatNumber, customRepeatUnit: customRepeatUnit, toDo: toDo, historyRetentionNumber: historyRetentionNumber, historyRetentionUnit: historyRetentionUnit)
     }
 }

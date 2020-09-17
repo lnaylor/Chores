@@ -20,7 +20,7 @@ class CalendarViewController: UIViewController {
     @IBOutlet var calendarView: CalendarView!
    // @IBOutlet private var yearBarButton: UIBarButtonItem!
     //@IBOutlet private var yearLabel: UILabel!
-    //@IBOutlet private var calendarTrailingConstraint: NSLayoutConstraint!
+   // @IBOutlet private var calendarTrailingConstraint: NSLayoutConstraint!
 
     private var viewType: ViewType = .month
     var settings: CalendarSettings!
@@ -40,14 +40,6 @@ class CalendarViewController: UIViewController {
         formatter.dateFormat = "yyyy"
         return formatter
     }()
-    
-    let dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MM/dd/yyyy"
-        return formatter
-    }()
-    
-   
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -72,8 +64,6 @@ class CalendarViewController: UIViewController {
             calendarView.selectDays(with: completedDates)
         }
        
-       // calendarView.selectDays(with: [Calendar.current.date(byAdding: .day, value: 1, to: Date())!])
-        // print(calendarView.currentDate)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -92,7 +82,7 @@ class CalendarViewController: UIViewController {
     
     private func updateCalendarSize() {
     //    calendarTrailingConstraint.constant = calendarView.isPortrait == false && viewType == .month ? view.frame.width / 2 : 0
-   //     view.layoutIfNeeded()
+      //  view.layoutIfNeeded()
     }
     
     private func applySettings() {
@@ -103,9 +93,9 @@ class CalendarViewController: UIViewController {
         
        
 
-       /* if #available(iOS 13.0, *) {
-            yearBarButton.image = viewType == .month ? UIImage(systemName: "chevron.left") : nil
-        }*/
+       // if #available(iOS 13.0, *) {
+         //   yearBarButton.image = viewType == .month ? UIImage(systemName: "chevron.left") : nil
+       // }
         
         switch viewType {
         case .month:
@@ -134,8 +124,6 @@ extension CalendarView : CalendarViewDelegate {
  
 }
 extension CalendarViewController: CalendarViewDelegate {
-    
-    
     
     func didSelectDate(_ date: Date) {
         if viewType == .year {
@@ -178,7 +166,7 @@ extension CalendarViewController: CalendarViewDelegate {
     }
     
     func didUpdateDisplayedDate(_ date: Date) {
-        //yearLabel.text = yearFormatter.string(from: date)
+      //  yearLabel.text = yearFormatter.string(from: date)
         //yearLabel.isHidden = viewType == .year
     }
     
