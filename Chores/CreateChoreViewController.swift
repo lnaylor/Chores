@@ -247,7 +247,7 @@ class CreateChoreViewController: UIViewController, UITextFieldDelegate, UIPicker
             
             let toDo = toDoSegment.titleForSegment(at: toDoSegment.selectedSegmentIndex) == "To Do" ? true : false
             
-            let historyRetentionNumber = historyPickerSelection0
+            let historyRetentionNumber = historyPickerSelection0+1
             let historyRetentionUnit = TimeUnit(rawValue: customRepeatPickerData1[historyPickerSelection1]) ?? TimeUnit.days
             
              

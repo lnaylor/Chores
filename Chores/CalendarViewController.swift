@@ -80,10 +80,10 @@ class CalendarViewController: UIViewController {
         applySettings()
     }
     
-    private func updateCalendarSize() {
+   // private func updateCalendarSize() {
     //    calendarTrailingConstraint.constant = calendarView.isPortrait == false && viewType == .month ? view.frame.width / 2 : 0
       //  view.layoutIfNeeded()
-    }
+   // }
     
     private func applySettings() {
         calendarView.isPagingEnabled = settings.isPagingEnabled
@@ -114,7 +114,7 @@ class CalendarViewController: UIViewController {
             calendarView.config.monthTitle.formatter = formetter
             calendarView.config.monthTitle.showSeparator = false
         }
-        updateCalendarSize()
+      //  updateCalendarSize()
        
         calendarView.data = CalendarData(calendar: calendar, startDate: settings.startDate, endDate: settings.endDate)
     }
@@ -171,7 +171,7 @@ extension CalendarViewController: CalendarViewDelegate {
     }
     
     func didChangeOrientation(_ isPortrait: Bool) {
-        updateCalendarSize()
+        //updateCalendarSize()
     }
 }
  

@@ -525,6 +525,10 @@ extension DayTableViewController : ChoreTableViewCellDelegate {
         case TimeUnit.years:
             d = Calendar.current.date(byAdding: .year, value: -1*chore.historyRetentionNumber, to: Date()) ?? Date()
         }
+        let minDate = Calendar.current.date(byAdding: .day, value: -30, to: Date()) ?? Date()
+        if (isDateGreaterThan(date1: d, date2: minDate)) {
+            d = minDate
+        }
         settings.startDate=d
         settings.endDate=getCorrectDate(date: Date())
         calendarView.settings = settings
