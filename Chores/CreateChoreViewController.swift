@@ -36,6 +36,7 @@ class CreateChoreViewController: UIViewController, UITextFieldDelegate, UIPicker
     @IBOutlet weak var repeatLabel: UILabel!
     @IBOutlet weak var endRepeatLabel: UILabel!
     @IBOutlet weak var pushBackLabel: UILabel!
+    @IBOutlet weak var customRepeatLabel: UILabel!
     
     var chore: Chore?
     var displayDate: Date?
@@ -94,9 +95,8 @@ class CreateChoreViewController: UIViewController, UITextFieldDelegate, UIPicker
     
     
     override func viewWillAppear(_ animated: Bool) {
-        if (repeatPickerData.isEmpty) {
-            repeatPickerData = RepeatType.allCases.map {$0.rawValue}
-        }
+       
+        repeatPickerData = RepeatType.allCases.map {$0.rawValue}
         if let chore = chore {
             repeatPickerSelection = repeatPickerData.firstIndex(of: chore.repeatType.rawValue)!
         }
@@ -119,6 +119,11 @@ class CreateChoreViewController: UIViewController, UITextFieldDelegate, UIPicker
         else {
              endRepeatButton.setTitle(dateFormatter.string(for: endRepeatDate) ?? "None", for: .normal)
         }
+        if (displayDate != nil) {
+            notScheduledSwitch.setOn(false, animated: true)
+            updateSegmentVisibility()
+            hideScheduleItems()
+        }
     }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -127,7 +132,7 @@ class CreateChoreViewController: UIViewController, UITextFieldDelegate, UIPicker
         //displayDate = getCorrectDate(date: Date())
         
         
-        repeatPickerData = RepeatType.allCases.map {$0.rawValue}
+        
         customRepeatPickerData1 = TimeUnit.allCases.map {$0.rawValue}
         
         nameTextField.delegate = self
@@ -143,7 +148,8 @@ class CreateChoreViewController: UIViewController, UITextFieldDelegate, UIPicker
         notScheduledSwitch.setOn(false, animated: true)
         
         deleteOnCompletionSwitch.setOn(false, animated: true)
-        
+        customRepeatScheduleButton.isHidden = true
+        customRepeatLabel.isHidden=true
        
         
         
@@ -218,14 +224,14 @@ class CreateChoreViewController: UIViewController, UITextFieldDelegate, UIPicker
         let dateButton = sender as? UIButton
         if let controller = segue.destination as? CalendarViewController {
             controller.settings = settings
-            controller.displayDate=getCorrectDate(date: displayDate ?? Date())
-            controller.endRepeatDate=endRepeatDate
             if (dateButton === calendarButton) {
+                controller.highlightedDate=getCorrectDate(date: displayDate ?? Date())
                 controller.setScheduleButton=true
                 controller.setEndRepeatButton=false
                 controller.setTableDate=false
             }
             else if (dateButton === endRepeatButton) {
+                controller.highlightedDate=endRepeatDate
                 controller.setEndRepeatButton=true
                 controller.setScheduleButton=false
                 controller.setTableDate=false
@@ -304,9 +310,11 @@ class CreateChoreViewController: UIViewController, UITextFieldDelegate, UIPicker
             
              if (RepeatType(rawValue: repeatPickerData[repeatPickerSelection]) == RepeatType.custom) {
                 customRepeatScheduleButton.isHidden = false
+                customRepeatLabel.isHidden = false
             }
              else {
                 customRepeatScheduleButton.isHidden = true
+                customRepeatLabel.isHidden=true
             }
         }
         
@@ -427,7 +435,9 @@ class CreateChoreViewController: UIViewController, UITextFieldDelegate, UIPicker
             displayDate = nil
             calendarButton.setTitle("None", for: .normal)
             
+        
             repeatScheduleButton.isHidden=true
+            
             endRepeatSwitch.isHidden=true
             endRepeatButton.isHidden=true
             repeatLabel.isHidden=true
@@ -437,6 +447,8 @@ class CreateChoreViewController: UIViewController, UITextFieldDelegate, UIPicker
         }
         else {
             repeatScheduleButton.isHidden=false
+            repeatLabel.isHidden=false
+            
             endRepeatSwitch.isHidden=false
             endRepeatButton.isHidden=false
             repeatLabel.isHidden=false

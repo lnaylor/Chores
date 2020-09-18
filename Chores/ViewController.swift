@@ -36,11 +36,11 @@ func getCorrectDate(date: Date) -> Date {
        return formatter.date(from: formatter.string(from: date)) ?? date
 }
 
-func isDateGreaterThan(date1: Date, date2: Date) -> Bool {
+func isDateLaterThan(date1: Date, date2: Date) -> Bool {
     return Calendar.current.compare(getCorrectDate(date: date1), to: getCorrectDate(date: date2), toGranularity: Calendar.Component.day) == ComparisonResult.orderedDescending
 }
 
-func isDateLessThan(date1: Date, date2: Date) -> Bool {
+func isDateEarlierThan(date1: Date, date2: Date) -> Bool {
     return Calendar.current.compare(getCorrectDate(date: date1), to: getCorrectDate(date: date2), toGranularity: Calendar.Component.day) == ComparisonResult.orderedAscending
 }
 

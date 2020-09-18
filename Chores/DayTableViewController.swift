@@ -37,6 +37,9 @@ class DayTableViewController: UITableViewController {
     }()
     var displayDate = getCorrectDate(date: Date())
     
+    override func viewWillAppear(_ animated: Bool) {
+        setLeftArrowUsability()
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,19 +58,19 @@ class DayTableViewController: UITableViewController {
         rightArrowButton.target = self
         
         if (!todayView) {
-                   leftArrowButton.isEnabled = false
-                   leftArrowButton.tintColor = UIColor.clear
+            leftArrowButton.isEnabled = false
+            leftArrowButton.tintColor = UIColor.clear
                    
-                   rightArrowButton.isEnabled = false
-                   rightArrowButton.tintColor = UIColor.clear
-               }
-               else {
-                   setLeftArrowUsability()
-                   leftArrowButton.tintColor = nil
+            rightArrowButton.isEnabled = false
+            rightArrowButton.tintColor = UIColor.clear
+        }
+        else {
+            setLeftArrowUsability()
+            leftArrowButton.tintColor = nil
                    
-                   rightArrowButton.isEnabled = true
-                   rightArrowButton.tintColor = nil
-               }
+            rightArrowButton.isEnabled = true
+            rightArrowButton.tintColor = nil
+        }
        
         if(todayView) {
             self.title=dateFormatter.string(for: displayDate)
@@ -87,17 +90,12 @@ class DayTableViewController: UITableViewController {
             titleButton.setTitle("To Do", for: .normal)
             titleButton.addTarget(self, action: #selector(clickOnTitleButton), for: .touchUpInside)
             navigationItem.titleView = titleButton
-    
-            
         }
         else if (allView) {
             self.title = "All Chores"
-           
         }
         
-        
        updateChores()
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -106,7 +104,6 @@ class DayTableViewController: UITableViewController {
         if let selectedIndexPath = tableView.indexPathForSelectedRow {
             tableView.reloadRows(at: [selectedIndexPath], with: .automatic)
         }
-
     }
     
 
@@ -162,9 +159,7 @@ class DayTableViewController: UITableViewController {
         chores.remove(at: fromIndexPath.row)
         chores.insert(itemToMove, at: to.row)
     }
-    
 
-    
     // Override to support conditional rearranging of the table view.
     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         // Return false if you do not want the item to be re-orderable.
@@ -375,15 +370,16 @@ class DayTableViewController: UITableViewController {
         }
         var d = chore.date
         while (d != nil) {
-            if (isDateGreaterThan(date1: d!, date2: date)) {
+            if (isDateLaterThan(date1: d!, date2: date)) {
                 return false
             }
             if Calendar.current.isDate(d!, inSameDayAs: date) {
                 return true
             }
             d = addRepeatAmountToDate(date: d!, repeatType: chore.repeatType, customRepeatNumber: chore.customRepeatNumber, customRepeatUnit: chore.customRepeatUnit)
-            if (chore.endRepeatDate != nil) {
-                if (isDateGreaterThan(date1: d!, date2: chore.endRepeatDate!)) {
+         
+            if (chore.endRepeatDate != nil && d != nil) {
+                if (isDateLaterThan(date1: d!, date2: chore.endRepeatDate!)) {
                     return false
                 }
             }
@@ -424,8 +420,10 @@ class DayTableViewController: UITableViewController {
     @objc func clickOnTitleButton() {
         if (todayView) {
             let calendarView = self.storyboard!.instantiateViewController(withIdentifier: "calendarView") as! CalendarViewController
-            calendarView.settings = CalendarSettings()
-            calendarView.tableDate=displayDate
+            let todaySettings = CalendarSettings()
+            todaySettings.startDate = getCorrectDate(date: Date())
+            calendarView.settings = todaySettings
+            calendarView.highlightedDate=displayDate
             calendarView.setTableDate=true
             calendarView.setScheduleButton=false
             calendarView.setEndRepeatButton=false
@@ -476,7 +474,7 @@ extension DayTableViewController : ChoreTableViewCellDelegate {
                 chore.date = Calendar.current.date(byAdding: .day, value: Int(days) ?? 1, to: chore.date!)
                 if (chore.repeatFromDate != nil) {
                     var d = chore.repeatFromDate
-                    while (isDateGreaterThan(date1: chore.date!, date2: chore.repeatFromDate!)) {
+                    while (isDateLaterThan(date1: chore.date!, date2: chore.repeatFromDate!)) {
                         chore.repeatFromDate = d
                         d = self.addRepeatAmountToDate(date: d!, repeatType: chore.repeatType, customRepeatNumber: chore.customRepeatNumber, customRepeatUnit: chore.customRepeatUnit)
                     }
@@ -525,12 +523,10 @@ extension DayTableViewController : ChoreTableViewCellDelegate {
         case TimeUnit.years:
             d = Calendar.current.date(byAdding: .year, value: -1*chore.historyRetentionNumber, to: Date()) ?? Date()
         }
-        let minDate = Calendar.current.date(byAdding: .day, value: -30, to: Date()) ?? Date()
-        if (isDateGreaterThan(date1: d, date2: minDate)) {
-            d = minDate
+        if (isDateLaterThan(date1: settings.startDate, date2: d)) {
+            settings.startDate = Calendar.current.date(byAdding: .year, value: -1, to: getCorrectDate(date: d)) ?? d
         }
-        settings.startDate=d
-        settings.endDate=getCorrectDate(date: Date())
+       
         calendarView.settings = settings
         
         calendarView.setTableDate=false

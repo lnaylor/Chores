@@ -12,18 +12,13 @@ enum ViewType {
     case month, year
 }
 
-
-
 class CalendarViewController: UIViewController {
     
-    
     @IBOutlet var calendarView: CalendarView!
-   // @IBOutlet private var yearBarButton: UIBarButtonItem!
-    //@IBOutlet private var yearLabel: UILabel!
-   // @IBOutlet private var calendarTrailingConstraint: NSLayoutConstraint!
 
     private var viewType: ViewType = .month
     var settings: CalendarSettings!
+    var highlightedDate: Date!
     var displayDate: Date!
     var setScheduleButton = false
     var setEndRepeatButton = false
@@ -34,36 +29,24 @@ class CalendarViewController: UIViewController {
     
     var showHistory = false
     var completedDates: [Date]!
-
-    private let yearFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy"
-        return formatter
-    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        print(showHistory)
         calendarView.calendarDelegate = self
         
         applySettings()
+        
+        if (highlightedDate != nil) {
+            calendarView.selectDay(with: getCorrectDate(date: highlightedDate))
+        }
       
-        if (setScheduleButton) {
-             calendarView.selectDay(with: getCorrectDate(date: displayDate))
-        }
-        else if (setEndRepeatButton) {
-            if endRepeatDate != nil {
-                calendarView.selectDay(with: endRepeatDate)
-            }
-           
-        }
-        else if (setTableDate) {
-            calendarView.selectDay(with: tableDate)
-        }
-        else if (showHistory) {
+        if (showHistory) {
             calendarView.selectDays(with: completedDates)
         }
-       
+        else {
+            disableDaysBeforeToday()
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -79,11 +62,6 @@ class CalendarViewController: UIViewController {
         viewType = viewType == .month ? .year : .month
         applySettings()
     }
-    
-   // private func updateCalendarSize() {
-    //    calendarTrailingConstraint.constant = calendarView.isPortrait == false && viewType == .month ? view.frame.width / 2 : 0
-      //  view.layoutIfNeeded()
-   // }
     
     private func applySettings() {
         calendarView.isPagingEnabled = settings.isPagingEnabled
@@ -115,8 +93,21 @@ class CalendarViewController: UIViewController {
             calendarView.config.monthTitle.showSeparator = false
         }
       //  updateCalendarSize()
-       
         calendarView.data = CalendarData(calendar: calendar, startDate: settings.startDate, endDate: settings.endDate)
+    }
+    
+    //MARK: Private functions
+    private func disableDaysBeforeToday() -> Void {
+        var disabledDates = [Date]()
+        for i in 1...calendar.component(Calendar.Component.day, from: getCorrectDate(date: Date())) {
+            if let oldDate = Calendar.current.date(byAdding: .day, value: -1*i, to: getCorrectDate(date: Date())) {
+                disabledDates.append(oldDate)
+                print(i)
+                print(oldDate)
+            }
+            
+        }
+        calendarView.disableDays(with: disabledDates)
     }
 }
 
