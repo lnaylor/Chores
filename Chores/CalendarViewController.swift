@@ -18,7 +18,7 @@ class CalendarViewController: UIViewController {
 
     private var viewType: ViewType = .month
     var settings: CalendarSettings!
-    var highlightedDate: Date!
+    var highlightedDate: Date?
     var displayDate: Date!
     var setScheduleButton = false
     var setEndRepeatButton = false
@@ -32,13 +32,14 @@ class CalendarViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(showHistory)
+        print(setScheduleButton)
+        print(setEndRepeatButton)
         calendarView.calendarDelegate = self
         
         applySettings()
         
         if (highlightedDate != nil) {
-            calendarView.selectDay(with: getCorrectDate(date: highlightedDate))
+            calendarView.selectDay(with: getCorrectDate(date: highlightedDate!))
         }
       
         if (showHistory) {
@@ -102,8 +103,6 @@ class CalendarViewController: UIViewController {
         for i in 1...calendar.component(Calendar.Component.day, from: getCorrectDate(date: Date())) {
             if let oldDate = Calendar.current.date(byAdding: .day, value: -1*i, to: getCorrectDate(date: Date())) {
                 disabledDates.append(oldDate)
-                print(i)
-                print(oldDate)
             }
             
         }
@@ -127,7 +126,7 @@ extension CalendarViewController: CalendarViewDelegate {
             if let previousController = navigationController?.viewControllers[index] as? CreateChoreViewController {
                 if (setScheduleButton) {
                     previousController.displayDateSetFromCalendar=true
-                    previousController.displayDate = getCorrectDate(date: date)
+                    previousController.nextScheduledDate = getCorrectDate(date: date)
                 }
                 else if (setEndRepeatButton) {
                     previousController.endRepeatDateSetFromCalendar=true

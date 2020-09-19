@@ -190,7 +190,7 @@ class DayTableViewController: UITableViewController {
             if let destinationNavigationController = segue.destination as? UINavigationController {
                 for index in (0 ... (destinationNavigationController.viewControllers.count) - 1).reversed(){
                     if let createChoreController = destinationNavigationController.viewControllers[index] as? CreateChoreViewController {
-                    createChoreController.displayDate = getCorrectDate(date: displayDate)
+                    createChoreController.nextScheduledDate = getCorrectDate(date: displayDate)
                     }
                 }
             }
@@ -241,11 +241,37 @@ class DayTableViewController: UITableViewController {
     func updateChores() {
         if let savedChores = loadChores() {
             chores = savedChores
+            /*
+            var completedDates = [Date]()
+            completedDates.append(Date())
+            completedDates.append(Calendar.current.date(byAdding: .day, value: -1, to: Date()) ?? Date())
+            completedDates.append(Calendar.current.date(byAdding: .day, value: -3, to: Date()) ?? Date())
+            completedDates.append(Calendar.current.date(byAdding: .day, value: -5, to: Date()) ?? Date())
+            completedDates.append(Calendar.current.date(byAdding: .day, value: -7, to: Date()) ?? Date())
+            completedDates.append(Calendar.current.date(byAdding: .day, value: -9, to: Date()) ?? Date())
+            chores.append(Chore(name: "TestHistory", type: ChoreType.oneTime, date: Date(), repeatType: RepeatType.none, endRepeatDate: nil, completedDates: completedDates, repeatFromDate: nil, deleteOnCompletion: false, customRepeatNumber: nil, customRepeatUnit: nil, toDo: false, historyRetentionNumber: 1, historyRetentionUnit: TimeUnit.weeks))*/
             for chore in chores {
                 if (chore.date != nil) {
                     if (Calendar.current.compare(getCorrectDate(date: chore.date!), to: getCorrectDate(date: Date()), toGranularity: Calendar.Component.day) == ComparisonResult.orderedAscending) {
                                   
                         chore.date = getCorrectDate(date: Date())
+                    }
+                }
+                if (!chore.completedDates.isEmpty) {
+                    var d: Date?
+                    switch chore.historyRetentionUnit {
+                    case TimeUnit.days:
+                        d = Calendar.current.date(byAdding: .day, value: -1*chore.historyRetentionNumber, to: getCorrectDate(date: Date())) ?? nil
+                    case TimeUnit.weeks:
+                        d = Calendar.current.date(byAdding: .day, value: -7*chore.historyRetentionNumber, to: getCorrectDate(date: Date())) ?? nil
+                    case TimeUnit.months:
+                        d = Calendar.current.date(byAdding: .month, value: -1*chore.historyRetentionNumber, to: getCorrectDate(date: Date())) ?? nil
+                    case TimeUnit.years:
+                        d = Calendar.current.date(byAdding: .year, value: -1*chore.historyRetentionNumber, to: getCorrectDate(date: Date())) ?? nil
+                    }
+                    if (d != nil) {
+                        chore.completedDates = chore.completedDates.filter{isDateLaterThan(date1: $0, date2: d!) || areDatesEqual(date1: $0, date2: d!)}
+                    saveChores()
                     }
                 }
             }
