@@ -18,8 +18,8 @@ enum RepeatType: String, CaseIterable {
     case daily = "Daily"
     case weekly = "Weekly"
     case biweekly = "Biweekly"
-    case monthly = "Montly"
-    case bimonthly = "BiMonthly"
+    case monthly = "Monthly"
+    case bimonthly = "Bimonthly"
     case yearly = "Yearly"
     case custom = "Custom"
 }

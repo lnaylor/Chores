@@ -51,8 +51,8 @@ class CreateChoreViewController: UIViewController, UITextFieldDelegate, UIPicker
     var customRepeatPickerSelection0 = 0
     var customRepeatPickerSelection1 = 0
     
-    var historyPickerSelection0 = 0
-    var historyPickerSelection1 = 0
+    var historyPickerSelection0 = 5
+    var historyPickerSelection1 = 2
     
     var customRepeatPickerData0: [String] = [String]()
     var customRepeatPickerData1: [String] = [String]()
@@ -66,12 +66,23 @@ class CreateChoreViewController: UIViewController, UITextFieldDelegate, UIPicker
     }
     
     override func viewWillAppear(_ animated: Bool) {
-       
+        
+        customRepeatPickerData1 = TimeUnit.allCases.map {$0.rawValue}
         repeatPickerData = RepeatType.allCases.map {$0.rawValue}
         if let chore = chore {
+            historyPickerSelection0 = chore.historyRetentionNumber-1
+            historyPickerSelection1 = customRepeatPickerData1.firstIndex(of: chore.historyRetentionUnit.rawValue)!
+            
             repeatPickerSelection = repeatPickerData.firstIndex(of: chore.repeatType.rawValue)!
+            
+            if (chore.repeatType == RepeatType.custom && chore.customRepeatNumber != nil && chore.customRepeatUnit != nil) {
+                customRepeatPickerSelection0 = chore.customRepeatNumber!-1
+                customRepeatPickerSelection1 = customRepeatPickerData1.firstIndex(of: chore.customRepeatUnit!.rawValue)!
+            }
         }
         repeatScheduleButton.setTitle(repeatPickerData[repeatPickerSelection], for: .normal)
+        updateCustomRepeatButtonMessage()
+        updateRepeatOptionsVisibility()
         
         if (chore != nil) && !displayDateSetFromCalendar {
             scheduleButton.setTitle(dateFormatter.string(for: chore?.date) ?? "None", for: .normal)
@@ -84,8 +95,13 @@ class CreateChoreViewController: UIViewController, UITextFieldDelegate, UIPicker
         }
         
         if (chore != nil) && !endRepeatDateSetFromCalendar {
-            endRepeatButton.setTitle(dateFormatter.string(for: chore?.endRepeatDate) ?? "None", for: .normal)
-            endRepeatDate = getCorrectDate(date: chore?.endRepeatDate ?? Date())
+            if (chore?.endRepeatDate != nil) {
+                endRepeatButton.setTitle(dateFormatter.string(for: chore?.endRepeatDate) ?? "None", for: .normal)
+                endRepeatDate = getCorrectDate(date: (chore?.endRepeatDate)!)
+            }
+            else {
+                endRepeatButton.setTitle("None", for: .normal)
+            }
         }
         else {
              endRepeatButton.setTitle(dateFormatter.string(for: endRepeatDate) ?? "None", for: .normal)
@@ -99,34 +115,33 @@ class CreateChoreViewController: UIViewController, UITextFieldDelegate, UIPicker
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        customRepeatPickerData1 = TimeUnit.allCases.map {$0.rawValue}
+        
         
         nameTextField.delegate = self
         
         
         endRepeatSwitch.setOn(false, animated: true)
-        endRepeatSwitch.isEnabled=false
         
         pushBackRepeatSwitch.setOn(false, animated: true)
-        pushBackRepeatSwitch.isEnabled=false
         
        
         notScheduledSwitch.setOn(false, animated: true)
         
         deleteOnCompletionSwitch.setOn(false, animated: true)
-        customRepeatScheduleButton.isHidden = true
-        customRepeatLabel.isHidden=true
        
         if let chore = chore {
             navigationItem.title = chore.name
             nameTextField.text = chore.name
             nextScheduledDate=chore.date ?? getCorrectDate(date: Date())
            
-            
+            if (chore.repeatType != RepeatType.none) {
+                print(chore.repeatFromDate)
+                pushBackRepeatSwitch.setOn(chore.repeatFromDate == nil, animated: true)
+            }
             
             if chore.endRepeatDate != nil {
                 endRepeatSwitch.setOn(true, animated: true)
-                endRepeatSwitch.isEnabled=true
+                endRepeatSwitch.isHidden=false
             }
             
             if chore.date == nil {
@@ -137,13 +152,16 @@ class CreateChoreViewController: UIViewController, UITextFieldDelegate, UIPicker
             deleteOnCompletionSwitch.setOn(chore.deleteOnCompletion, animated: true)
             
             if (chore.toDo) {
+                print("TODO")
                 toDoSegment.selectedSegmentIndex = 0
             }
             else {
+                print("SAVED")
                 toDoSegment.selectedSegmentIndex = 1
             }
         }
        
+        
         updateSegmentVisibility()
         updateSaveButtonState()
     }
@@ -262,22 +280,6 @@ class CreateChoreViewController: UIViewController, UITextFieldDelegate, UIPicker
         
         if (pickerView === repeatPicker) {
             repeatPickerSelection = row
-            if (RepeatType(rawValue: repeatPickerData[repeatPickerSelection]) != RepeatType.none) {
-                pushBackRepeatSwitch.isEnabled=true
-            }
-            else {
-                pushBackRepeatSwitch.setOn(false, animated: true)
-                pushBackRepeatSwitch.isEnabled=false
-            }
-            
-             if (RepeatType(rawValue: repeatPickerData[repeatPickerSelection]) == RepeatType.custom) {
-                customRepeatScheduleButton.isHidden = false
-                customRepeatLabel.isHidden = false
-            }
-             else {
-                customRepeatScheduleButton.isHidden = true
-                customRepeatLabel.isHidden=true
-            }
         }
         
         else if (pickerView === customRepeatPicker) {
@@ -321,13 +323,16 @@ class CreateChoreViewController: UIViewController, UITextFieldDelegate, UIPicker
         if let chore = chore {
             repeatPicker.selectRow(repeatPickerData.firstIndex(of: chore.repeatType.rawValue) ?? 0, inComponent: 0, animated: true)
             repeatPickerSelection = repeatPickerData.firstIndex(of: chore.repeatType.rawValue) ?? 0
-            
+        }
+        else {
+            repeatPicker.selectRow(repeatPickerSelection, inComponent: 0, animated: true)
         }
         
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (UIAlertAction) in
             
             self.repeatScheduleButton.setTitle(self.repeatPickerData[self.repeatPickerSelection], for: .normal)
+            self.updateRepeatOptionsVisibility()
         
         }))
         self.present(alert,animated: true, completion: nil )
@@ -353,8 +358,7 @@ class CreateChoreViewController: UIViewController, UITextFieldDelegate, UIPicker
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (UIAlertAction) in
             
-            let message = String(self.customRepeatPickerSelection0) + " " + self.customRepeatPickerData1[self.customRepeatPickerSelection1]
-            self.customRepeatScheduleButton.setTitle(message, for: .normal)
+            self.updateCustomRepeatButtonMessage()
         
         }))
         self.present(alert,animated: true, completion: nil )
@@ -364,10 +368,10 @@ class CreateChoreViewController: UIViewController, UITextFieldDelegate, UIPicker
         if !endRepeatSwitch.isOn {
             endRepeatDate = nil
              endRepeatButton.setTitle("None", for: .normal)
-            endRepeatSwitch.isEnabled=false
+            endRepeatSwitch.isHidden=true
         }
         else {
-            endRepeatSwitch.isEnabled=true
+            endRepeatSwitch.isHidden=false
         }
     }
     
@@ -416,6 +420,37 @@ class CreateChoreViewController: UIViewController, UITextFieldDelegate, UIPicker
         }
     }
     
+    private func updateCustomRepeatButtonMessage() {
+        let message = String(customRepeatPickerSelection0+1) + " " + customRepeatPickerData1[customRepeatPickerSelection1]
+        customRepeatScheduleButton.setTitle(message, for: .normal)
+    }
+    
+    private func updateRepeatOptionsVisibility() {
+        if (RepeatType(rawValue: repeatPickerData[repeatPickerSelection]) != RepeatType.none) {
+            endRepeatLabel.isHidden=false
+            endRepeatButton.isHidden=false
+            endRepeatSwitch.isHidden = endRepeatDate != nil ? false : true
+            pushBackLabel.isHidden=false
+            pushBackRepeatSwitch.isHidden=false
+        }
+        else {
+            endRepeatLabel.isHidden=true
+            endRepeatButton.isHidden=true
+            endRepeatSwitch.isHidden=true
+            pushBackLabel.isHidden=true
+            pushBackRepeatSwitch.isHidden=true
+        }
+        
+        if (RepeatType(rawValue: repeatPickerData[repeatPickerSelection]) == RepeatType.custom) {
+            customRepeatLabel.isHidden=false
+            customRepeatScheduleButton.isHidden=false
+        }
+        else {
+            customRepeatLabel.isHidden=true
+            customRepeatScheduleButton.isHidden=true
+        }
+    }
+    
     private func hideScheduleItems() {
         if notScheduledSwitch.isOn {
             nextScheduledDate = nil
@@ -433,12 +468,7 @@ class CreateChoreViewController: UIViewController, UITextFieldDelegate, UIPicker
             repeatScheduleButton.isHidden=false
             repeatLabel.isHidden=false
             
-            endRepeatSwitch.isHidden=false
-            endRepeatButton.isHidden=false
-            repeatLabel.isHidden=false
-            endRepeatLabel.isHidden=false
-            pushBackLabel.isHidden=false
-            pushBackRepeatSwitch.isHidden=false
+           updateRepeatOptionsVisibility()
         }
     }
     

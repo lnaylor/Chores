@@ -131,8 +131,36 @@ class DayTableViewController: UITableViewController {
         cell.chore = chore
         cell.delegate = self
         
+        if (chore.date != nil) {
+            if (isDateLaterThan(date1: getCorrectDate(date: displayDate), date2: getCorrectDate(date: chore.date!))) {
+                cell.doneButton.isHidden = true
+                cell.skipButton.isHidden = true
+            }
+            else {
+                cell.doneButton.isHidden = false
+                cell.skipButton.isHidden = false
+            }
+        }
+        else if (chore.toDo) {
+            cell.doneButton.isHidden = false
+            cell.skipButton.isHidden = true
+        }
+        else {
+            cell.doneButton.isHidden=true
+            cell.skipButton.isHidden=true
+        }
+        
         if chore.repeatType == RepeatType.none {
             cell.skipButton.isHidden = true
+        }
+        else if (chore.endRepeatDate != nil) {
+            
+            if let d = addRepeatAmountToDate(date: getCorrectDate(date: displayDate), repeatType: chore.repeatType, customRepeatNumber: chore.customRepeatNumber, customRepeatUnit: chore.customRepeatUnit) {
+                if (isDateLaterThan(date1: getCorrectDate(date: d), date2: getCorrectDate(date: chore.endRepeatDate!))) {
+                    cell.skipButton.isHidden=true
+                }
+            }
+            
         }
 
         return cell
@@ -394,7 +422,13 @@ class DayTableViewController: UITableViewController {
         if (Calendar.current.compare(chore.date!, to: date, toGranularity: Calendar.Component.day) == ComparisonResult.orderedDescending) {
             return false
         }
-        var d = chore.date
+        var d: Date?
+        if (chore.repeatFromDate != nil) {
+            d = chore.repeatFromDate!
+        }
+        else if (chore.date != nil){
+            d = chore.date!
+        }
         while (d != nil) {
             if (isDateLaterThan(date1: d!, date2: date)) {
                 return false
@@ -470,18 +504,21 @@ extension DayTableViewController : ChoreTableViewCellDelegate {
     func choreDoneButtonCell(_ choreTableViewCell: ChoreTableViewCell, chore: Chore) {
         updateChoreDate(chore: chore)
         if (chore.date == nil && chore.deleteOnCompletion) {
-            print(tableView.indexPath(for: choreTableViewCell))
             if let selectedIndexPath = tableView.indexPath(for: choreTableViewCell) {
-                print("deleting at")
-                print(selectedIndexPath.row)
                 chores.remove(at: selectedIndexPath.row)
             }
            
         }
         else {
+            if (chore.date == nil) {
+                chore.toDo=false
+            }
+            else {
+                chore.toDo=true
+            }
             chore.completedDates.append(getCorrectDate(date: Date()))
         }
-        
+        saveChores()
         tableView.reloadData()
     }
     

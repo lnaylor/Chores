@@ -132,7 +132,7 @@ extension CalendarViewController: CalendarViewDelegate {
                     previousController.endRepeatDateSetFromCalendar=true
                     previousController.endRepeatDate = getCorrectDate(date: date)
                     previousController.endRepeatSwitch.setOn(true, animated: true)
-                    previousController.endRepeatSwitch.isEnabled=true
+                    previousController.endRepeatSwitch.isHidden=false
                 }
 
             }
