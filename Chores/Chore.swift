@@ -26,6 +26,7 @@ class Chore: NSObject, NSCoding {
     var toDo: Bool
     var historyRetentionNumber: Int
     var historyRetentionUnit: TimeUnit
+    var pushedBack: Bool
     
     //MARK: Archiving Paths
     
@@ -48,9 +49,10 @@ class Chore: NSObject, NSCoding {
         static let toDo = "toDo"
         static let historyRetentionNumber = "historyRetentionNumber"
         static let historyRetentionUnit = "historyRetentionUnit"
+        static let pushedBack = "pushedBack"
     }
     
-    init(name: String, type: ChoreType, date: Date?, repeatType: RepeatType, endRepeatDate: Date?, repeatFromDate: Date?, deleteOnCompletion: Bool, customRepeatNumber: Int?, customRepeatUnit: TimeUnit?, toDo: Bool, historyRetentionNumber: Int, historyRetentionUnit: TimeUnit) {
+    init(name: String, type: ChoreType, date: Date?, repeatType: RepeatType, endRepeatDate: Date?, repeatFromDate: Date?, deleteOnCompletion: Bool, customRepeatNumber: Int?, customRepeatUnit: TimeUnit?, toDo: Bool, historyRetentionNumber: Int, historyRetentionUnit: TimeUnit, pushedBack: Bool = false) {
         self.name=name
         self.type=type
         self.date=date
@@ -64,9 +66,10 @@ class Chore: NSObject, NSCoding {
         self.historyRetentionNumber=historyRetentionNumber
         self.historyRetentionUnit=historyRetentionUnit
         self.toDo = toDo
+        self.pushedBack = pushedBack
     }
     
-    init(name: String, type: ChoreType, date: Date?, repeatType: RepeatType, endRepeatDate: Date?, completedDates: [Date], repeatFromDate: Date?, deleteOnCompletion: Bool, customRepeatNumber: Int?, customRepeatUnit: TimeUnit?, toDo: Bool, historyRetentionNumber: Int, historyRetentionUnit: TimeUnit) {
+    init(name: String, type: ChoreType, date: Date?, repeatType: RepeatType, endRepeatDate: Date?, completedDates: [Date], repeatFromDate: Date?, deleteOnCompletion: Bool, customRepeatNumber: Int?, customRepeatUnit: TimeUnit?, toDo: Bool, historyRetentionNumber: Int, historyRetentionUnit: TimeUnit, pushedBack: Bool = false) {
         self.name=name
         self.type=type
         self.date=date
@@ -80,6 +83,7 @@ class Chore: NSObject, NSCoding {
         self.historyRetentionNumber=historyRetentionNumber
         self.historyRetentionUnit=historyRetentionUnit
         self.toDo = toDo
+        self.pushedBack = pushedBack
     }
     
     //MARK: NSCoding
@@ -98,6 +102,7 @@ class Chore: NSObject, NSCoding {
         aCoder.encode(toDo, forKey: PropertyKey.toDo)
         aCoder.encode(historyRetentionNumber, forKey: PropertyKey.historyRetentionNumber)
         aCoder.encode(historyRetentionUnit.rawValue, forKey: PropertyKey.historyRetentionUnit)
+        aCoder.encode(pushedBack, forKey: PropertyKey.pushedBack)
     }
     
     required convenience init?(coder aDecoder: NSCoder) {
@@ -115,12 +120,6 @@ class Chore: NSObject, NSCoding {
 
         
         let repeatType = RepeatType(rawValue: aDecoder.decodeObject(forKey: PropertyKey.repeatType) as? String ?? RepeatType.none.rawValue)
-        
-        /*
-        guard let repeatType = RepeatType(rawValue: aDecoder.decodeObject(forKey: PropertyKey.repeatType) as! String) else {
-            os_log("Unable to decode the repeatType for a Chore object.", log: OSLog.default, type: .debug)
-            return nil
-        }*/
         
         let endRepeatDate = aDecoder.decodeObject(forKey: PropertyKey.endRepeatDate) as? Date
         
@@ -147,6 +146,8 @@ class Chore: NSObject, NSCoding {
         
         let historyRetentionUnit = TimeUnit(rawValue: aDecoder.decodeObject(forKey: PropertyKey.historyRetentionUnit) as? String ?? TimeUnit.days.rawValue) ?? TimeUnit.days
         
-        self.init(name: name, type: type, date: date, repeatType: repeatType ?? RepeatType.none, endRepeatDate: endRepeatDate, completedDates: completedDates, repeatFromDate: repeatFromDate, deleteOnCompletion: deleteOnCompletion, customRepeatNumber: customRepeatNumber, customRepeatUnit: customRepeatUnit, toDo: toDo, historyRetentionNumber: historyRetentionNumber, historyRetentionUnit: historyRetentionUnit)
+        let pushedBack = aDecoder.decodeBool(forKey: PropertyKey.pushedBack) as Bool
+        
+        self.init(name: name, type: type, date: date, repeatType: repeatType ?? RepeatType.none, endRepeatDate: endRepeatDate, completedDates: completedDates, repeatFromDate: repeatFromDate, deleteOnCompletion: deleteOnCompletion, customRepeatNumber: customRepeatNumber, customRepeatUnit: customRepeatUnit, toDo: toDo, historyRetentionNumber: historyRetentionNumber, historyRetentionUnit: historyRetentionUnit, pushedBack: pushedBack)
     }
 }

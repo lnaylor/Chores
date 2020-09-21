@@ -135,19 +135,32 @@ class DayTableViewController: UITableViewController {
             if (isDateLaterThan(date1: getCorrectDate(date: displayDate), date2: getCorrectDate(date: chore.date!))) {
                 cell.doneButton.isHidden = true
                 cell.skipButton.isHidden = true
+                cell.pushButton.isHidden = true
             }
             else {
                 cell.doneButton.isHidden = false
                 cell.skipButton.isHidden = false
+                cell.pushButton.isHidden = false
+            }
+            
+            if (chore.repeatType != RepeatType.none && chore.repeatFromDate != nil) {
+                if (areDatesEqual(date1: getCorrectDate(date: chore.repeatFromDate!), date2: Calendar.current.date(byAdding: .day, value: 1, to: chore.date!) ?? getCorrectDate(date: displayDate))) {
+                    cell.pushButton.isHidden = true
+                }
+                else if (areDatesEqual(date1: addRepeatAmountToDate(date: chore.repeatFromDate!, repeatType: chore.repeatType, customRepeatNumber: chore.customRepeatNumber, customRepeatUnit: chore.customRepeatUnit) ?? getCorrectDate(date: displayDate), date2: Calendar.current.date(byAdding: .day, value: 1, to: chore.date!) ?? getCorrectDate(date: displayDate))) {
+                    cell.pushButton.isHidden=true
+                }
             }
         }
         else if (chore.toDo) {
             cell.doneButton.isHidden = false
             cell.skipButton.isHidden = true
+            cell.pushButton.isHidden = true
         }
         else {
             cell.doneButton.isHidden=true
             cell.skipButton.isHidden=true
+            cell.pushButton.isHidden=true
         }
         
         if chore.repeatType == RepeatType.none {
@@ -280,9 +293,14 @@ class DayTableViewController: UITableViewController {
             chores.append(Chore(name: "TestHistory", type: ChoreType.oneTime, date: Date(), repeatType: RepeatType.none, endRepeatDate: nil, completedDates: completedDates, repeatFromDate: nil, deleteOnCompletion: false, customRepeatNumber: nil, customRepeatUnit: nil, toDo: false, historyRetentionNumber: 1, historyRetentionUnit: TimeUnit.weeks))*/
             for chore in chores {
                 if (chore.date != nil) {
-                    if (Calendar.current.compare(getCorrectDate(date: chore.date!), to: getCorrectDate(date: Date()), toGranularity: Calendar.Component.day) == ComparisonResult.orderedAscending) {
-                                  
+                    if (isDateEarlierThan(date1: getCorrectDate(date: chore.date!), date2: getCorrectDate(date: Date()))) {
                         chore.date = getCorrectDate(date: Date())
+                        if (chore.repeatType != RepeatType.none && chore.repeatFromDate != nil) {
+                            if (isDateEarlierThan(date1: chore.repeatFromDate!, date2: chore.date!)) {
+                                chore.repeatFromDate = addRepeatAmountToDate(date: chore.repeatFromDate!, repeatType: chore.repeatType, customRepeatNumber: chore.customRepeatNumber, customRepeatUnit: chore.customRepeatUnit)
+                            }
+                        }
+                        saveChores()
                     }
                 }
                 if (!chore.completedDates.isEmpty) {
@@ -358,6 +376,13 @@ class DayTableViewController: UITableViewController {
     
     private func addRepeatAmountToChore(chore: Chore) -> Date? {
         var date: Date
+        if (chore.pushedBack && chore.repeatFromDate != nil && chore.date != nil) {
+            if (isDateLaterThan(date1: getCorrectDate(date: chore.date!), date2: chore.repeatFromDate!)) {
+                chore.repeatFromDate = addRepeatAmountToDate(date: chore.repeatFromDate!, repeatType: chore.repeatType, customRepeatNumber: chore.customRepeatNumber, customRepeatUnit: chore.customRepeatUnit)
+            }
+            chore.pushedBack = false
+            return chore.repeatFromDate
+        }
         if (chore.repeatFromDate != nil) {
             date = chore.repeatFromDate!
         }
@@ -419,7 +444,7 @@ class DayTableViewController: UITableViewController {
         if (chore.date == nil) {
             return false
         }
-        if (Calendar.current.compare(chore.date!, to: date, toGranularity: Calendar.Component.day) == ComparisonResult.orderedDescending) {
+        if (Calendar.current.compare(getCorrectDate(date: chore.date!), to: getCorrectDate(date: date), toGranularity: Calendar.Component.day) == ComparisonResult.orderedDescending) {
             return false
         }
         var d: Date?
@@ -516,6 +541,9 @@ extension DayTableViewController : ChoreTableViewCellDelegate {
             else {
                 chore.toDo=true
             }
+            if (chore.pushedBack) {
+                chore.pushedBack=false
+            }
             chore.completedDates.append(getCorrectDate(date: Date()))
         }
         saveChores()
@@ -542,7 +570,9 @@ extension DayTableViewController : ChoreTableViewCellDelegate {
                         d = self.addRepeatAmountToDate(date: d!, repeatType: chore.repeatType, customRepeatNumber: chore.customRepeatNumber, customRepeatUnit: chore.customRepeatUnit)
                     }
                 }
-               
+                if (chore.repeatFromDate != nil) {
+                    chore.pushedBack=true
+                }
                 self.saveChores()
                 self.tableView.reloadData()
             }
