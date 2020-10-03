@@ -36,16 +36,25 @@ func getCorrectDate(date: Date) -> Date {
        return formatter.date(from: formatter.string(from: date)) ?? date
 }
 
-func isDateLaterThan(date1: Date, date2: Date) -> Bool {
-    return Calendar.current.compare(getCorrectDate(date: date1), to: getCorrectDate(date: date2), toGranularity: Calendar.Component.day) == ComparisonResult.orderedDescending
+func isDateLaterThan(date1: Date?, date2: Date?) -> Bool {
+    if (date1 == nil || date2 == nil) {
+        return false
+    }
+    return Calendar.current.compare(date1!, to: date2!, toGranularity: Calendar.Component.day) == ComparisonResult.orderedDescending
 }
 
-func isDateEarlierThan(date1: Date, date2: Date) -> Bool {
-    return Calendar.current.compare(getCorrectDate(date: date1), to: getCorrectDate(date: date2), toGranularity: Calendar.Component.day) == ComparisonResult.orderedAscending
+func isDateEarlierThan(date1: Date?, date2: Date?) -> Bool {
+    if (date1 == nil || date2 == nil) {
+        return false
+    }
+    return Calendar.current.compare(date1!, to: date2!, toGranularity: Calendar.Component.day) == ComparisonResult.orderedAscending
 }
 
-func areDatesEqual(date1: Date, date2: Date) -> Bool {
-    return Calendar.current.isDate(getCorrectDate(date: date1), inSameDayAs: getCorrectDate(date: date2))
+func areDatesEqual(date1: Date?, date2: Date?) -> Bool {
+    if (date1 == nil || date2 == nil) {
+        return false
+    }
+    return Calendar.current.isDate(date1!, inSameDayAs: date2!)
 }
 
 class ViewController: UIViewController {

@@ -135,8 +135,8 @@ class CreateChoreViewController: UIViewController, UITextFieldDelegate, UIPicker
             nextScheduledDate=chore.date ?? getCorrectDate(date: Date())
            
             if (chore.repeatType != RepeatType.none) {
-                print(chore.repeatFromDate)
-                pushBackRepeatSwitch.setOn(chore.repeatFromDate == nil, animated: true)
+                print(chore.nextRepeatedDate)
+                pushBackRepeatSwitch.setOn(chore.nextRepeatedDate == nil, animated: true)
             }
             
             if chore.endRepeatDate != nil {

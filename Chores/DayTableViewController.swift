@@ -132,7 +132,7 @@ class DayTableViewController: UITableViewController {
         cell.delegate = self
         
         if (chore.date != nil) {
-            if (isDateLaterThan(date1: getCorrectDate(date: displayDate), date2: getCorrectDate(date: chore.date!))) {
+            if (isDateLaterThan(date1: displayDate, date2: chore.date!)) {
                 cell.doneButton.isHidden = true
                 cell.skipButton.isHidden = true
                 cell.pushButton.isHidden = true
@@ -143,12 +143,16 @@ class DayTableViewController: UITableViewController {
                 cell.pushButton.isHidden = false
             }
             
-            if (chore.repeatType != RepeatType.none && chore.repeatFromDate != nil) {
-                if (areDatesEqual(date1: getCorrectDate(date: chore.repeatFromDate!), date2: Calendar.current.date(byAdding: .day, value: 1, to: chore.date!) ?? getCorrectDate(date: displayDate))) {
-                    cell.pushButton.isHidden = true
+            if (chore.repeatType != RepeatType.none) {
+                var nextRepeatedDate: Date?
+                if (chore.pushedBack && chore.nextRepeatedDate != nil) {
+                    nextRepeatedDate = chore.nextRepeatedDate!
                 }
-                else if (areDatesEqual(date1: addRepeatAmountToDate(date: chore.repeatFromDate!, repeatType: chore.repeatType, customRepeatNumber: chore.customRepeatNumber, customRepeatUnit: chore.customRepeatUnit) ?? getCorrectDate(date: displayDate), date2: Calendar.current.date(byAdding: .day, value: 1, to: chore.date!) ?? getCorrectDate(date: displayDate))) {
-                    cell.pushButton.isHidden=true
+                else {
+                    nextRepeatedDate = addRepeatAmountToDate(date: chore.date!, repeatType: chore.repeatType, customRepeatNumber: chore.customRepeatNumber, customRepeatUnit: chore.customRepeatUnit)
+                }
+                if (areDatesEqual(date1: nextRepeatedDate, date2: Calendar.current.date(byAdding: .day, value: 1, to: chore.date!) ?? nil)) {
+                    cell.pushButton.isHidden = true
                 }
             }
         }
@@ -168,12 +172,11 @@ class DayTableViewController: UITableViewController {
         }
         else if (chore.endRepeatDate != nil) {
             
-            if let d = addRepeatAmountToDate(date: getCorrectDate(date: displayDate), repeatType: chore.repeatType, customRepeatNumber: chore.customRepeatNumber, customRepeatUnit: chore.customRepeatUnit) {
-                if (isDateLaterThan(date1: getCorrectDate(date: d), date2: getCorrectDate(date: chore.endRepeatDate!))) {
+            if let d = addRepeatAmountToDate(date: displayDate, repeatType: chore.repeatType, customRepeatNumber: chore.customRepeatNumber, customRepeatUnit: chore.customRepeatUnit) {
+                if (isDateLaterThan(date1: d, date2: chore.endRepeatDate!)) {
                     cell.skipButton.isHidden=true
                 }
             }
-            
         }
 
         return cell
@@ -231,7 +234,7 @@ class DayTableViewController: UITableViewController {
             if let destinationNavigationController = segue.destination as? UINavigationController {
                 for index in (0 ... (destinationNavigationController.viewControllers.count) - 1).reversed(){
                     if let createChoreController = destinationNavigationController.viewControllers[index] as? CreateChoreViewController {
-                    createChoreController.nextScheduledDate = getCorrectDate(date: displayDate)
+                    createChoreController.nextScheduledDate = displayDate
                     }
                 }
             }
@@ -293,11 +296,11 @@ class DayTableViewController: UITableViewController {
             chores.append(Chore(name: "TestHistory", type: ChoreType.oneTime, date: Date(), repeatType: RepeatType.none, endRepeatDate: nil, completedDates: completedDates, repeatFromDate: nil, deleteOnCompletion: false, customRepeatNumber: nil, customRepeatUnit: nil, toDo: false, historyRetentionNumber: 1, historyRetentionUnit: TimeUnit.weeks))*/
             for chore in chores {
                 if (chore.date != nil) {
-                    if (isDateEarlierThan(date1: getCorrectDate(date: chore.date!), date2: getCorrectDate(date: Date()))) {
+                    if (isDateEarlierThan(date1: chore.date!, date2: getCorrectDate(date: Date()))) {
                         chore.date = getCorrectDate(date: Date())
-                        if (chore.repeatType != RepeatType.none && chore.repeatFromDate != nil) {
-                            if (isDateEarlierThan(date1: chore.repeatFromDate!, date2: chore.date!)) {
-                                chore.repeatFromDate = addRepeatAmountToDate(date: chore.repeatFromDate!, repeatType: chore.repeatType, customRepeatNumber: chore.customRepeatNumber, customRepeatUnit: chore.customRepeatUnit)
+                        if (chore.repeatType != RepeatType.none && chore.nextRepeatedDate != nil) {
+                            if (isDateEarlierThan(date1: chore.nextRepeatedDate!, date2: chore.date!)) {
+                                chore.nextRepeatedDate = addRepeatAmountToDate(date: chore.nextRepeatedDate!, repeatType: chore.repeatType, customRepeatNumber: chore.customRepeatNumber, customRepeatUnit: chore.customRepeatUnit)
                             }
                         }
                         saveChores()
@@ -376,15 +379,15 @@ class DayTableViewController: UITableViewController {
     
     private func addRepeatAmountToChore(chore: Chore) -> Date? {
         var date: Date
-        if (chore.pushedBack && chore.repeatFromDate != nil && chore.date != nil) {
-            if (isDateLaterThan(date1: getCorrectDate(date: chore.date!), date2: chore.repeatFromDate!)) {
-                chore.repeatFromDate = addRepeatAmountToDate(date: chore.repeatFromDate!, repeatType: chore.repeatType, customRepeatNumber: chore.customRepeatNumber, customRepeatUnit: chore.customRepeatUnit)
+        if (chore.pushedBack && chore.nextRepeatedDate != nil && chore.date != nil) {
+            if (isDateLaterThan(date1: getCorrectDate(date: chore.date!), date2: chore.nextRepeatedDate!)) {
+                chore.nextRepeatedDate = addRepeatAmountToDate(date: chore.nextRepeatedDate!, repeatType: chore.repeatType, customRepeatNumber: chore.customRepeatNumber, customRepeatUnit: chore.customRepeatUnit)
             }
             chore.pushedBack = false
-            return chore.repeatFromDate
+            return chore.nextRepeatedDate
         }
-        if (chore.repeatFromDate != nil) {
-            date = chore.repeatFromDate!
+        if (chore.nextRepeatedDate != nil) {
+            date = chore.nextRepeatedDate!
         }
         else if (chore.date != nil){
             date = chore.date!
@@ -448,8 +451,8 @@ class DayTableViewController: UITableViewController {
             return false
         }
         var d: Date?
-        if (chore.repeatFromDate != nil) {
-            d = chore.repeatFromDate!
+        if (chore.nextRepeatedDate != nil) {
+            d = chore.nextRepeatedDate!
         }
         else if (chore.date != nil){
             d = chore.date!
@@ -479,6 +482,29 @@ class DayTableViewController: UITableViewController {
         saveChores()
     }
     
+    private func pushBackChoreDate(chore: Chore, num: Int, unit: TimeUnit) {
+        var d: Date?
+        switch(unit) {
+        case TimeUnit.days:
+            d = Calendar.current.date(byAdding: .day, value: num, to: chore.date!)
+        case TimeUnit.weeks:
+            d = Calendar.current.date(byAdding: .day, value: num * 7, to: chore.date!)
+        case TimeUnit.months:
+            d = Calendar.current.date(byAdding: .month, value: num, to: chore.date!)
+        case TimeUnit.years:
+            d = Calendar.current.date(byAdding: .year, value: num, to: chore.date!)
+        }
+        if (chore.repeatType != RepeatType.none && !chore.pushBackRepeat && chore.date != nil ) {
+            if (!chore.pushedBack) {
+                chore.nextRepeatedDate = addRepeatAmountToDate(date: chore.date!, repeatType: chore.repeatType, customRepeatNumber: chore.customRepeatNumber, customRepeatUnit: chore.customRepeatUnit)
+            }
+            if (d == nil || isDateLaterThan(date1: d, date2: chore.nextRepeatedDate) || areDatesEqual(date1: d, date2: chore.nextRepeatedDate)) {
+                return
+            }
+        }
+        chore.date = d
+        chore.pushedBack = true
+    }
     
     //MARK: Objc functions
        
@@ -563,14 +589,14 @@ extension DayTableViewController : ChoreTableViewCellDelegate {
 
             if let days = alert.textFields?.first?.text {
                 chore.date = Calendar.current.date(byAdding: .day, value: Int(days) ?? 1, to: chore.date!)
-                if (chore.repeatFromDate != nil) {
-                    var d = chore.repeatFromDate
-                    while (isDateLaterThan(date1: chore.date!, date2: chore.repeatFromDate!)) {
-                        chore.repeatFromDate = d
+                if (chore.nextRepeatedDate != nil) {
+                    var d = chore.nextRepeatedDate
+                    while (isDateLaterThan(date1: chore.date!, date2: chore.nextRepeatedDate!)) {
+                        chore.nextRepeatedDate = d
                         d = self.addRepeatAmountToDate(date: d!, repeatType: chore.repeatType, customRepeatNumber: chore.customRepeatNumber, customRepeatUnit: chore.customRepeatUnit)
                     }
                 }
-                if (chore.repeatFromDate != nil) {
+                if (chore.nextRepeatedDate != nil) {
                     chore.pushedBack=true
                 }
                 self.saveChores()
