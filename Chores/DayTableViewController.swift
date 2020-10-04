@@ -9,7 +9,7 @@
 import UIKit
 import os.log
 
-class DayTableViewController: UITableViewController {
+class DayTableViewController: UITableViewController, UIPickerViewDataSource, UIPickerViewDelegate {
     
     //MARK: Properties
     
@@ -29,6 +29,9 @@ class DayTableViewController: UITableViewController {
     var todayView = false
     var unscheduledView = false
     var allView = false
+    
+    var pushBackPickerSelection = 0
+    var pushBackPickerMax = 0
     
     let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -297,13 +300,9 @@ class DayTableViewController: UITableViewController {
             for chore in chores {
                 if (chore.date != nil) {
                     if (isDateEarlierThan(date1: chore.date!, date2: getCorrectDate(date: Date()))) {
-                        chore.date = getCorrectDate(date: Date())
-                        if (chore.repeatType != RepeatType.none && chore.nextRepeatedDate != nil) {
-                            if (isDateEarlierThan(date1: chore.nextRepeatedDate!, date2: chore.date!)) {
-                                chore.nextRepeatedDate = addRepeatAmountToDate(date: chore.nextRepeatedDate!, repeatType: chore.repeatType, customRepeatNumber: chore.customRepeatNumber, customRepeatUnit: chore.customRepeatUnit)
-                            }
+                        if let numDays = Calendar.current.dateComponents([.day], from: chore.date!, to: getCorrectDate(date: Date())).day {
+                            pushBackChoreDate(chore: chore, num: numDays, unit: TimeUnit.days)
                         }
-                        saveChores()
                     }
                 }
                 if (!chore.completedDates.isEmpty) {
@@ -320,10 +319,10 @@ class DayTableViewController: UITableViewController {
                     }
                     if (d != nil) {
                         chore.completedDates = chore.completedDates.filter{isDateLaterThan(date1: $0, date2: d!) || areDatesEqual(date1: $0, date2: d!)}
-                    saveChores()
                     }
                 }
             }
+            saveChores()
            tableView.reloadData()
         }
     }
@@ -378,33 +377,23 @@ class DayTableViewController: UITableViewController {
    }
     
     private func addRepeatAmountToChore(chore: Chore) -> Date? {
-        var date: Date
-        if (chore.pushedBack && chore.nextRepeatedDate != nil && chore.date != nil) {
-            if (isDateLaterThan(date1: getCorrectDate(date: chore.date!), date2: chore.nextRepeatedDate!)) {
-                chore.nextRepeatedDate = addRepeatAmountToDate(date: chore.nextRepeatedDate!, repeatType: chore.repeatType, customRepeatNumber: chore.customRepeatNumber, customRepeatUnit: chore.customRepeatUnit)
-            }
+        if (chore.date == nil || chore.repeatType == RepeatType.none) {
+            return nil
+        }
+       
+        if (chore.pushedBack && chore.nextRepeatedDate != nil) {
             chore.pushedBack = false
             return chore.nextRepeatedDate
         }
-        if (chore.nextRepeatedDate != nil) {
-            date = chore.nextRepeatedDate!
-        }
-        else if (chore.date != nil){
-            date = chore.date!
-        }
-        else {
-            return nil
-        }
-        if (chore.repeatType == RepeatType.none) {
-            return nil
-        }
-        let d = addRepeatAmountToDate(date: date, repeatType: chore.repeatType, customRepeatNumber: chore.customRepeatNumber, customRepeatUnit: chore.customRepeatUnit)
+      
+    
+        let d = addRepeatAmountToDate(date: chore.date!, repeatType: chore.repeatType, customRepeatNumber: chore.customRepeatNumber, customRepeatUnit: chore.customRepeatUnit)
         
-        if (chore.endRepeatDate != nil && d != nil) {
-            if (Calendar.current.compare(d!, to: chore.endRepeatDate!, toGranularity: Calendar.Component.day) == ComparisonResult.orderedDescending) {
-                return nil
-            }
+       
+        if (isDateLaterThan(date1: d, date2: chore.endRepeatDate)) {
+            return nil
         }
+        
         return d
     }
 
@@ -447,21 +436,24 @@ class DayTableViewController: UITableViewController {
         if (chore.date == nil) {
             return false
         }
-        if (Calendar.current.compare(getCorrectDate(date: chore.date!), to: getCorrectDate(date: date), toGranularity: Calendar.Component.day) == ComparisonResult.orderedDescending) {
+        if (isDateLaterThan(date1: chore.date, date2: date)) {
             return false
+        }
+        if (areDatesEqual(date1: chore.date, date2: date)) {
+            return true
         }
         var d: Date?
         if (chore.nextRepeatedDate != nil) {
             d = chore.nextRepeatedDate!
         }
-        else if (chore.date != nil){
+        else {
             d = chore.date!
         }
         while (d != nil) {
             if (isDateLaterThan(date1: d!, date2: date)) {
                 return false
             }
-            if Calendar.current.isDate(d!, inSameDayAs: date) {
+            if (areDatesEqual(date1: d, date2: date)) {
                 return true
             }
             d = addRepeatAmountToDate(date: d!, repeatType: chore.repeatType, customRepeatNumber: chore.customRepeatNumber, customRepeatUnit: chore.customRepeatUnit)
@@ -483,6 +475,9 @@ class DayTableViewController: UITableViewController {
     }
     
     private func pushBackChoreDate(chore: Chore, num: Int, unit: TimeUnit) {
+        if (chore.date == nil) {
+            return
+        }
         var d: Date?
         switch(unit) {
         case TimeUnit.days:
@@ -494,16 +489,28 @@ class DayTableViewController: UITableViewController {
         case TimeUnit.years:
             d = Calendar.current.date(byAdding: .year, value: num, to: chore.date!)
         }
-        if (chore.repeatType != RepeatType.none && !chore.pushBackRepeat && chore.date != nil ) {
+        if (d == nil) {
+            return
+        }
+        
+        if (chore.repeatType != RepeatType.none && !chore.pushBackRepeat) {
             if (!chore.pushedBack) {
-                chore.nextRepeatedDate = addRepeatAmountToDate(date: chore.date!, repeatType: chore.repeatType, customRepeatNumber: chore.customRepeatNumber, customRepeatUnit: chore.customRepeatUnit)
+                chore.nextRepeatedDate = chore.date
             }
-            if (d == nil || isDateLaterThan(date1: d, date2: chore.nextRepeatedDate) || areDatesEqual(date1: d, date2: chore.nextRepeatedDate)) {
-                return
+            
+            while (isDateEarlierThan(date1: chore.nextRepeatedDate, date2: d)) {
+                chore.nextRepeatedDate = addRepeatAmountToDate(date: chore.nextRepeatedDate!, repeatType: chore.repeatType, customRepeatNumber: chore.customRepeatNumber, customRepeatUnit: chore.customRepeatUnit)
             }
         }
+        
         chore.date = d
-        chore.pushedBack = true
+        if (areDatesEqual(date1: chore.date, date2: chore.nextRepeatedDate)) {
+            chore.pushedBack = false
+            chore.nextRepeatedDate = nil
+        }
+        else {
+            chore.pushedBack = true
+        }
     }
     
     //MARK: Objc functions
@@ -547,6 +554,25 @@ class DayTableViewController: UITableViewController {
         }
               
     }
+    
+    //MARK: Picker functions
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return pushBackPickerMax
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return String(row)
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        
+        pushBackPickerSelection = row
+        
+    }
        
 
 }
@@ -582,47 +608,43 @@ extension DayTableViewController : ChoreTableViewCellDelegate {
     }
     
     func chorePushButtonCell(_ choreTableViewCell: ChoreTableViewCell, chore: Chore) {
-        let alert = UIAlertController(title: "Push back how many days?", message: nil, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        
-        let okAction = UIAlertAction(title: "OK", style: .default, handler: { action in
-
-            if let days = alert.textFields?.first?.text {
-                chore.date = Calendar.current.date(byAdding: .day, value: Int(days) ?? 1, to: chore.date!)
-                if (chore.nextRepeatedDate != nil) {
-                    var d = chore.nextRepeatedDate
-                    while (isDateLaterThan(date1: chore.date!, date2: chore.nextRepeatedDate!)) {
-                        chore.nextRepeatedDate = d
-                        d = self.addRepeatAmountToDate(date: d!, repeatType: chore.repeatType, customRepeatNumber: chore.customRepeatNumber, customRepeatUnit: chore.customRepeatUnit)
-                    }
-                }
-                if (chore.nextRepeatedDate != nil) {
-                    chore.pushedBack=true
-                }
-                self.saveChores()
-                self.tableView.reloadData()
+        if (chore.date != nil && chore.repeatType != RepeatType.none) {
+            if (chore.pushedBack && chore.nextRepeatedDate != nil) {
+                pushBackPickerMax = Calendar.current.dateComponents([.day], from: chore.date!, to: chore.nextRepeatedDate!).day ?? 1000
             }
-        })
-
-        alert.addTextField(configurationHandler: { textField in
-            textField.text = "1"
-            textField.keyboardType = .numberPad
-            textField.textAlignment =  .center
-            
-            NotificationCenter.default.addObserver(forName: UITextField.textDidChangeNotification, object: textField, queue: OperationQueue.main, using:
-                {_ in
-                   
-                    let textCount = textField.text?.trimmingCharacters(in: .whitespacesAndNewlines).count ?? 0
-                    let textIsNotEmpty = textCount > 0
-                    
-                    okAction.isEnabled = textIsNotEmpty
-                
-            })
-        })
-
-        alert.addAction(okAction)
-
-        self.present(alert, animated: true)
+            else {
+                if let nextDate = addRepeatAmountToDate(date: chore.date!, repeatType: chore.repeatType, customRepeatNumber: chore.customRepeatNumber, customRepeatUnit: chore.customRepeatUnit) {
+                    pushBackPickerMax = Calendar.current.dateComponents([.day], from: chore.date!, to: nextDate).day ?? 1000
+                }
+                else {
+                    pushBackPickerMax = 1000
+                }
+            }
+        }
+        else {
+            pushBackPickerMax = 1000
+        }
+        let alert = UIAlertController(title: "Push back how many days?\n\n\n", message: nil, preferredStyle: .alert)
+        if #available(iOS 13, *) {
+            alert.isModalInPresentation = true
+        } else {
+            alert.isModalInPopover = true
+        }
+        let pushBackPicker = UIPickerView(frame: CGRect(x: 5, y: 10, width: 250, height: 130))
+               
+        alert.view.addSubview(pushBackPicker)
+        pushBackPicker.dataSource = self
+        pushBackPicker.delegate = self
+        
+        pushBackPicker.selectRow(0, inComponent: 0, animated: true)
+               
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (UIAlertAction) in
+            self.pushBackChoreDate(chore: chore, num: self.pushBackPickerSelection, unit: TimeUnit.days)
+            self.saveChores()
+            self.tableView.reloadData()
+        }))
+        self.present(alert,animated: true, completion: nil )
     }
     
     func choreHistoryButtonCell(_ choreTableViewCell: ChoreTableViewCell, chore: Chore) {

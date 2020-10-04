@@ -135,8 +135,7 @@ class CreateChoreViewController: UIViewController, UITextFieldDelegate, UIPicker
             nextScheduledDate=chore.date ?? getCorrectDate(date: Date())
            
             if (chore.repeatType != RepeatType.none) {
-                print(chore.nextRepeatedDate)
-                pushBackRepeatSwitch.setOn(chore.nextRepeatedDate == nil, animated: true)
+                pushBackRepeatSwitch.setOn(chore.pushBackRepeat, animated: true)
             }
             
             if chore.endRepeatDate != nil {
@@ -152,11 +151,9 @@ class CreateChoreViewController: UIViewController, UITextFieldDelegate, UIPicker
             deleteOnCompletionSwitch.setOn(chore.deleteOnCompletion, animated: true)
             
             if (chore.toDo) {
-                print("TODO")
                 toDoSegment.selectedSegmentIndex = 0
             }
             else {
-                print("SAVED")
                 toDoSegment.selectedSegmentIndex = 1
             }
         }
@@ -223,7 +220,7 @@ class CreateChoreViewController: UIViewController, UITextFieldDelegate, UIPicker
         
         if (button === saveButton) {
             let name = nameTextField.text ?? ""
-            let repeatFromDate = pushBackRepeatSwitch.isOn ? nil : nextScheduledDate
+            let pushBackRepeat = pushBackRepeatSwitch.isOn
             let nextScheduledDateValue = notScheduledSwitch.isOn ? nil : nextScheduledDate
             let repeatType = RepeatType(rawValue: repeatPickerData[repeatPickerSelection]) ?? RepeatType.none
             
@@ -237,7 +234,7 @@ class CreateChoreViewController: UIViewController, UITextFieldDelegate, UIPicker
             let historyRetentionUnit = TimeUnit(rawValue: customRepeatPickerData1[historyPickerSelection1]) ?? TimeUnit.days
             
              
-            chore = Chore(name: name, type: ChoreType.oneTime, date: nextScheduledDateValue, repeatType: repeatType, endRepeatDate: endRepeatDate, repeatFromDate: repeatFromDate, deleteOnCompletion: deleteOnCompletionSwitch.isOn, customRepeatNumber: customRepeatNumber, customRepeatUnit: customRepeatUnit, toDo: toDo, historyRetentionNumber: historyRetentionNumber, historyRetentionUnit: historyRetentionUnit)
+            chore = Chore(name: name, type: ChoreType.oneTime, date: nextScheduledDateValue, repeatType: repeatType, endRepeatDate: endRepeatDate, nextRepeatedDate: nil, deleteOnCompletion: deleteOnCompletionSwitch.isOn, customRepeatNumber: customRepeatNumber, customRepeatUnit: customRepeatUnit, toDo: toDo, historyRetentionNumber: historyRetentionNumber, historyRetentionUnit: historyRetentionUnit, pushBackRepeat: pushBackRepeat)
         }
         
     }
