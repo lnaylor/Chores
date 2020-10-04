@@ -16,7 +16,7 @@ class CalendarSettings {
     var isPagingEnabled: Bool = false
     var showDaysOut: Bool = true
     var selectionType: SelectionType = .one
-    var date: Date = Date()
+    var date: Date = getCorrectDate(date: Date())
 }
 
 let dateFormatter: DateFormatter = {

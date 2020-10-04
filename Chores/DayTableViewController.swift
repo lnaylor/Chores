@@ -69,10 +69,10 @@ class DayTableViewController: UITableViewController, UIPickerViewDataSource, UIP
         }
         else {
             setLeftArrowUsability()
-            leftArrowButton.tintColor = nil
+            leftArrowButton.tintColor = UIColor.darkGray
                    
             rightArrowButton.isEnabled = true
-            rightArrowButton.tintColor = nil
+            rightArrowButton.tintColor = UIColor.darkGray
         }
        
         if(todayView) {
@@ -656,13 +656,13 @@ extension DayTableViewController : ChoreTableViewCellDelegate {
         var d: Date
         switch chore.historyRetentionUnit {
         case TimeUnit.days:
-            d = Calendar.current.date(byAdding: .day, value: -1*chore.historyRetentionNumber, to: Date()) ?? Date()
+            d = Calendar.current.date(byAdding: .day, value: -1*chore.historyRetentionNumber, to: getCorrectDate(date: Date())) ?? getCorrectDate(date: Date())
         case TimeUnit.weeks:
-            d = Calendar.current.date(byAdding: .day, value: -7*chore.historyRetentionNumber, to: Date()) ?? Date()
+            d = Calendar.current.date(byAdding: .day, value: -7*chore.historyRetentionNumber, to: getCorrectDate(date: Date())) ?? getCorrectDate(date: Date())
         case TimeUnit.months:
-            d = Calendar.current.date(byAdding: .month, value: -1*chore.historyRetentionNumber, to: Date()) ?? Date()
+            d = Calendar.current.date(byAdding: .month, value: -1*chore.historyRetentionNumber, to: getCorrectDate(date: Date())) ?? getCorrectDate(date: Date())
         case TimeUnit.years:
-            d = Calendar.current.date(byAdding: .year, value: -1*chore.historyRetentionNumber, to: Date()) ?? Date()
+            d = Calendar.current.date(byAdding: .year, value: -1*chore.historyRetentionNumber, to: getCorrectDate(date: Date())) ?? getCorrectDate(date: Date())
         }
         if (isDateLaterThan(date1: settings.startDate, date2: d)) {
             settings.startDate = Calendar.current.date(byAdding: .year, value: -1, to: getCorrectDate(date: d)) ?? d
