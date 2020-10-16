@@ -69,17 +69,17 @@ class DayTableViewController: UITableViewController, UIPickerViewDataSource, UIP
         }
         else {
             setLeftArrowUsability()
-            leftArrowButton.tintColor = UIColor.darkGray
+            leftArrowButton.tintColor = UIColor.label
                    
             rightArrowButton.isEnabled = true
-            rightArrowButton.tintColor = UIColor.darkGray
+            rightArrowButton.tintColor = UIColor.label
         }
        
         if(todayView) {
             self.title=dateFormatter.string(for: displayDate)
             titleButton.frame = CGRect(x: 0, y:0, width: 100, height: 40)
             titleButton.backgroundColor = .clear
-            titleButton.setTitleColor(.black, for: .normal)
+            titleButton.setTitleColor(.label, for: .normal)
             titleButton.setTitle(dateFormatter.string(for: displayDate), for: .normal)
             titleButton.addTarget(self, action: #selector(clickOnTitleButton), for: .touchUpInside)
             navigationItem.titleView = titleButton
@@ -89,7 +89,7 @@ class DayTableViewController: UITableViewController, UIPickerViewDataSource, UIP
             self.title = "To Do"
             titleButton.frame = CGRect(x: 0, y:0, width: 100, height: 40)
             titleButton.backgroundColor = .clear
-            titleButton.setTitleColor(.black, for: .normal)
+            titleButton.setTitleColor(.label, for: .normal)
             titleButton.setTitle("To Do", for: .normal)
             titleButton.addTarget(self, action: #selector(clickOnTitleButton), for: .touchUpInside)
             navigationItem.titleView = titleButton

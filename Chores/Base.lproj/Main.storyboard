@@ -88,7 +88,7 @@
                     <navigationItem key="navigationItem" title="Chores" id="yX5-YN-c6I">
                         <leftBarButtonItems>
                             <barButtonItem title="Home" image="house.fill" catalog="system" id="QIh-ZN-o9M">
-                                <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="tintColor" systemColor="labelColor"/>
                             </barButtonItem>
                             <barButtonItem width="21" id="FjO-Vc-86X">
                                 <color key="tintColor" systemColor="groupTableViewBackgroundColor"/>
@@ -99,7 +99,7 @@
                         </leftBarButtonItems>
                         <rightBarButtonItems>
                             <barButtonItem systemItem="add" id="Mei-Lp-pab">
-                                <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="tintColor" systemColor="labelColor"/>
                                 <connections>
                                     <segue destination="C2F-P0-cIX" kind="presentation" identifier="AddItem" id="ZO6-gE-WmS"/>
                                 </connections>
@@ -192,7 +192,7 @@
                                 <rect key="frame" x="210" y="170" width="115" height="40"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button">
-                                    <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <color key="titleColor" systemColor="labelColor"/>
                                 </state>
                                 <connections>
                                     <segue destination="bup-LD-zap" kind="show" id="3KX-TY-xNv"/>
@@ -202,7 +202,7 @@
                                 <rect key="frame" x="210" y="460" width="115" height="40"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button">
-                                    <color key="titleColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <color key="titleColor" systemColor="labelColor"/>
                                 </state>
                                 <connections>
                                     <segue destination="bup-LD-zap" kind="show" id="RQf-e5-fpD"/>
@@ -211,7 +211,7 @@
                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="af1-To-1fp">
                                 <rect key="frame" x="210" y="515" width="49" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="onTintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="onTintColor" systemColor="secondaryLabelColor"/>
                                 <connections>
                                     <action selector="pushBackRepeatSwitchAction:" destination="1ym-dK-VYk" eventType="valueChanged" id="wYc-zl-7hM"/>
                                 </connections>
@@ -219,7 +219,7 @@
                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eBe-KE-c5F">
                                 <rect key="frame" x="210" y="225" width="49" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="onTintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="onTintColor" systemColor="secondaryLabelColor"/>
                                 <connections>
                                     <action selector="notScheduledSwitchAction:" destination="1ym-dK-VYk" eventType="valueChanged" id="aYX-8j-3qz"/>
                                 </connections>
@@ -227,7 +227,7 @@
                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fSH-sV-lCE">
                                 <rect key="frame" x="210" y="125" width="49" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="onTintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="onTintColor" systemColor="secondaryLabelColor"/>
                                 <connections>
                                     <action selector="deleteOnCompletionSwitchAction:" destination="1ym-dK-VYk" eventType="valueChanged" id="dEa-Nd-MBv"/>
                                 </connections>
@@ -251,7 +251,7 @@
                                 <rect key="frame" x="20" y="687" width="119" height="59"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="History Retention">
-                                    <color key="titleColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <color key="titleColor" systemColor="labelColor"/>
                                 </state>
                                 <connections>
                                     <action selector="showHistorySettings:" destination="1ym-dK-VYk" eventType="touchUpInside" id="ktZ-Er-RcV"/>
@@ -261,7 +261,7 @@
                                 <rect key="frame" x="210" y="360" width="115" height="40"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button">
-                                    <color key="titleColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <color key="titleColor" systemColor="labelColor"/>
                                 </state>
                                 <connections>
                                     <action selector="showRepeatOptions:" destination="1ym-dK-VYk" eventType="touchUpInside" id="vge-2a-dFq"/>
@@ -271,7 +271,7 @@
                                 <rect key="frame" x="210" y="410" width="115" height="40"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button">
-                                    <color key="titleColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <color key="titleColor" systemColor="labelColor"/>
                                 </state>
                                 <connections>
                                     <action selector="showCustomRepeatOptions:" destination="1ym-dK-VYk" eventType="touchUpInside" id="wo9-0F-quY"/>
@@ -280,7 +280,7 @@
                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ndu-ev-51h">
                                 <rect key="frame" x="339" y="465" width="49" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="onTintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="onTintColor" systemColor="secondaryLabelColor"/>
                                 <connections>
                                     <action selector="endRepeatSwitchAction:" destination="1ym-dK-VYk" eventType="valueChanged" id="BZL-XI-cIY"/>
                                 </connections>
@@ -291,13 +291,13 @@
                     </view>
                     <navigationItem key="navigationItem" title="New Chore" id="Yv6-g6-tjM">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="uYW-8Y-wPX">
-                            <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <color key="tintColor" systemColor="labelColor"/>
                             <connections>
                                 <action selector="cancel:" destination="1ym-dK-VYk" id="hg1-pJ-fmF"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="save" id="KhV-bq-mA4">
-                            <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <color key="tintColor" systemColor="labelColor"/>
                             <connections>
                                 <segue destination="Uvu-04-3p7" kind="unwind" unwindAction="unwindToChoreListWithSender:" id="9QR-uy-GJI"/>
                             </connections>
@@ -464,6 +464,12 @@
         </systemColor>
         <systemColor name="groupTableViewBackgroundColor">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="secondaryLabelColor">
+            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
