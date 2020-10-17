@@ -32,8 +32,7 @@ class CalendarViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(setScheduleButton)
-        print(setEndRepeatButton)
+        
         calendarView.calendarDelegate = self
         
         applySettings()

@@ -181,8 +181,8 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Push Back on Delay:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Eza-bG-Gc1">
-                                <rect key="frame" x="20" y="510" width="155" height="40"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Push Back on Delay:" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Eza-bG-Gc1">
+                                <rect key="frame" x="20" y="510" width="119" height="49"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
@@ -208,14 +208,6 @@
                                     <segue destination="bup-LD-zap" kind="show" id="RQf-e5-fpD"/>
                                 </connections>
                             </button>
-                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="af1-To-1fp">
-                                <rect key="frame" x="210" y="515" width="49" height="31"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="onTintColor" systemColor="secondaryLabelColor"/>
-                                <connections>
-                                    <action selector="pushBackRepeatSwitchAction:" destination="1ym-dK-VYk" eventType="valueChanged" id="wYc-zl-7hM"/>
-                                </connections>
-                            </switch>
                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eBe-KE-c5F">
                                 <rect key="frame" x="210" y="225" width="49" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -283,6 +275,14 @@
                                 <color key="onTintColor" systemColor="secondaryLabelColor"/>
                                 <connections>
                                     <action selector="endRepeatSwitchAction:" destination="1ym-dK-VYk" eventType="valueChanged" id="BZL-XI-cIY"/>
+                                </connections>
+                            </switch>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="af1-To-1fp">
+                                <rect key="frame" x="210" y="519" width="49" height="31"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="onTintColor" systemColor="secondaryLabelColor"/>
+                                <connections>
+                                    <action selector="pushBackRepeatSwitchAction:" destination="1ym-dK-VYk" eventType="valueChanged" id="wYc-zl-7hM"/>
                                 </connections>
                             </switch>
                         </subviews>

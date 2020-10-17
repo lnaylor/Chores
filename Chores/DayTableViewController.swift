@@ -237,7 +237,12 @@ class DayTableViewController: UITableViewController, UIPickerViewDataSource, UIP
             if let destinationNavigationController = segue.destination as? UINavigationController {
                 for index in (0 ... (destinationNavigationController.viewControllers.count) - 1).reversed(){
                     if let createChoreController = destinationNavigationController.viewControllers[index] as? CreateChoreViewController {
-                    createChoreController.nextScheduledDate = displayDate
+                        if (todayView) {
+                            createChoreController.nextScheduledDate = displayDate
+                        }
+                        else if (unscheduledView && self.title == "To Do") {
+                            createChoreController.cameFromToDo = true
+                        }
                     }
                 }
             }

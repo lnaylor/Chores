@@ -102,6 +102,8 @@ class Chore: NSObject, NSCoding {
         aCoder.encode(nextRepeatedDate, forKey: PropertyKey.nextRepeatedDate)
         aCoder.encode(deleteOnCompletion, forKey: PropertyKey.deleteOnCompletion)
         aCoder.encode(customRepeatNumber, forKey: PropertyKey.customRepeatNumber)
+        print("SAVING")
+        print(customRepeatNumber)
         aCoder.encode(customRepeatUnit?.rawValue, forKey: PropertyKey.customRepeatUnit)
         aCoder.encode(toDo, forKey: PropertyKey.toDo)
         aCoder.encode(historyRetentionNumber, forKey: PropertyKey.historyRetentionNumber)
@@ -135,11 +137,9 @@ class Chore: NSObject, NSCoding {
         let deleteOnCompletion = aDecoder.decodeBool(forKey: PropertyKey.deleteOnCompletion) as Bool
         
         var customRepeatNumber: Int?
-        if let customRepeatNumberString = aDecoder.decodeObject(forKey: PropertyKey.customRepeatNumber) as? String {
-            customRepeatNumber = Int(customRepeatNumberString)
+        if let customRepeatNumberString = aDecoder.decodeObject(forKey: PropertyKey.customRepeatNumber) as? Int {
+            customRepeatNumber = customRepeatNumberString
         }
-        
- 
         
         
         let customRepeatUnitString = aDecoder.decodeObject(forKey: PropertyKey.customRepeatUnit) as? String ?? ""

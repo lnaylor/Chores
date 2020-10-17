@@ -57,7 +57,7 @@ class CreateChoreViewController: UIViewController, UITextFieldDelegate, UIPicker
     var customRepeatPickerData0: [String] = [String]()
     var customRepeatPickerData1: [String] = [String]()
     
-    
+    var cameFromToDo = false
     
     @IBAction func pushBackRepeatSwitchAction(_ sender: Any) {
     }
@@ -66,15 +66,15 @@ class CreateChoreViewController: UIViewController, UITextFieldDelegate, UIPicker
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        
         customRepeatPickerData1 = TimeUnit.allCases.map {$0.rawValue}
         repeatPickerData = RepeatType.allCases.map {$0.rawValue}
         if let chore = chore {
+      
             historyPickerSelection0 = chore.historyRetentionNumber-1
             historyPickerSelection1 = customRepeatPickerData1.firstIndex(of: chore.historyRetentionUnit.rawValue)!
             
             repeatPickerSelection = repeatPickerData.firstIndex(of: chore.repeatType.rawValue)!
-            
+        
             if (chore.repeatType == RepeatType.custom && chore.customRepeatNumber != nil && chore.customRepeatUnit != nil) {
                 customRepeatPickerSelection0 = chore.customRepeatNumber!-1
                 customRepeatPickerSelection1 = customRepeatPickerData1.firstIndex(of: chore.customRepeatUnit!.rawValue)!
@@ -92,6 +92,16 @@ class CreateChoreViewController: UIViewController, UITextFieldDelegate, UIPicker
         }
         else {
             scheduleButton.setTitle("None", for: .normal)
+            notScheduledSwitch.setOn(true, animated: true)
+            updateSegmentVisibility()
+            if (cameFromToDo) {
+                toDoSegment.selectedSegmentIndex = 0
+            }
+            else {
+                toDoSegment.selectedSegmentIndex = 1
+            }
+            hideScheduleItems()
+            deleteOnCompletionSwitch.setOn(true, animated: true)
         }
         
         if (chore != nil) && !endRepeatDateSetFromCalendar {
@@ -115,10 +125,8 @@ class CreateChoreViewController: UIViewController, UITextFieldDelegate, UIPicker
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
-        
         nameTextField.delegate = self
-        
+        nameTextField.autocapitalizationType = .words;
         
         endRepeatSwitch.setOn(false, animated: true)
         
@@ -156,9 +164,11 @@ class CreateChoreViewController: UIViewController, UITextFieldDelegate, UIPicker
             else {
                 toDoSegment.selectedSegmentIndex = 1
             }
+            
+            
         }
        
-        
+       
         updateSegmentVisibility()
         updateSaveButtonState()
     }
@@ -167,6 +177,7 @@ class CreateChoreViewController: UIViewController, UITextFieldDelegate, UIPicker
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         //Hide the keyboard
+        updateSaveButtonState()
         textField.resignFirstResponder()
         return true
     }
@@ -233,7 +244,7 @@ class CreateChoreViewController: UIViewController, UITextFieldDelegate, UIPicker
             let historyRetentionNumber = historyPickerSelection0+1
             let historyRetentionUnit = TimeUnit(rawValue: customRepeatPickerData1[historyPickerSelection1]) ?? TimeUnit.days
             
-             
+            
             chore = Chore(name: name, type: ChoreType.oneTime, date: nextScheduledDateValue, repeatType: repeatType, endRepeatDate: endRepeatDate, nextRepeatedDate: nil, deleteOnCompletion: deleteOnCompletionSwitch.isOn, customRepeatNumber: customRepeatNumber, customRepeatUnit: customRepeatUnit, toDo: toDo, historyRetentionNumber: historyRetentionNumber, historyRetentionUnit: historyRetentionUnit, pushBackRepeat: pushBackRepeat)
         }
         
