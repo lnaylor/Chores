@@ -32,7 +32,7 @@ class CalendarViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        self.navigationController?.navigationBar.tintColor = UIColor.label;
         calendarView.calendarDelegate = self
         
         applySettings()
