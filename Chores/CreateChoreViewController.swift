@@ -396,7 +396,7 @@ class CreateChoreViewController: UIViewController, UITextFieldDelegate, UIPicker
             alert.isModalInPopover = true
         }
                
-        historyPickerView = UIPickerView(frame: CGRect(x: 5, y: 10, width: 250, height: 130))
+        historyPickerView = UIPickerView(frame: CGRect(x: 5, y: 35, width: 250, height: 130))
                
         alert.view.addSubview(historyPickerView)
         historyPickerView.dataSource = self

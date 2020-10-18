@@ -20,6 +20,7 @@ class DayTableViewController: UITableViewController, UIPickerViewDataSource, UIP
     @IBOutlet weak var rightSpacer: UIBarButtonItem!
     @IBOutlet weak var leftSpacer: UIBarButtonItem!
     
+    @IBOutlet weak var editButton: UIBarButtonItem!
     
     var chores = [Chore]()
     var currentChores = [Chore]()
@@ -44,6 +45,16 @@ class DayTableViewController: UITableViewController, UIPickerViewDataSource, UIP
         setLeftArrowUsability()
     }
 
+    @IBAction func editButtonClicked(_ sender: Any) {
+        self.tableView.isEditing = !self.tableView.isEditing
+        if (self.tableView.isEditing) {
+            editButton.image = UIImage(systemName: "pencil.slash")
+        }
+        else {
+            editButton.image = UIImage(systemName: "pencil.circle.fill")
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
        
@@ -205,6 +216,7 @@ class DayTableViewController: UITableViewController, UIPickerViewDataSource, UIP
         let itemToMove = chores[fromIndexPath.row]
         chores.remove(at: fromIndexPath.row)
         chores.insert(itemToMove, at: to.row)
+        saveChores()
     }
 
     // Override to support conditional rearranging of the table view.
@@ -570,7 +582,7 @@ class DayTableViewController: UITableViewController, UIPickerViewDataSource, UIP
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return String(row)
+        return String(row+1)
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
@@ -629,13 +641,13 @@ extension DayTableViewController : ChoreTableViewCellDelegate {
         else {
             pushBackPickerMax = 1000
         }
-        let alert = UIAlertController(title: "Push back how many days?\n\n\n", message: nil, preferredStyle: .alert)
+        let alert = UIAlertController(title: "Push back how many days?\n\n\n\n", message: nil, preferredStyle: .alert)
         if #available(iOS 13, *) {
             alert.isModalInPresentation = true
         } else {
             alert.isModalInPopover = true
         }
-        let pushBackPicker = UIPickerView(frame: CGRect(x: 5, y: 10, width: 250, height: 130))
+        let pushBackPicker = UIPickerView(frame: CGRect(x: 5, y: 30, width: 250, height: 100))
                
         alert.view.addSubview(pushBackPicker)
         pushBackPicker.dataSource = self
@@ -645,7 +657,7 @@ extension DayTableViewController : ChoreTableViewCellDelegate {
                
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (UIAlertAction) in
-            self.pushBackChoreDate(chore: chore, num: self.pushBackPickerSelection, unit: TimeUnit.days)
+            self.pushBackChoreDate(chore: chore, num: self.pushBackPickerSelection+1, unit: TimeUnit.days)
             self.saveChores()
             self.tableView.reloadData()
         }))

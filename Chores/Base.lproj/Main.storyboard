@@ -90,8 +90,11 @@
                             <barButtonItem title="Home" image="house.fill" catalog="system" id="QIh-ZN-o9M">
                                 <color key="tintColor" systemColor="labelColor"/>
                             </barButtonItem>
-                            <barButtonItem width="21" id="FjO-Vc-86X">
-                                <color key="tintColor" systemColor="groupTableViewBackgroundColor"/>
+                            <barButtonItem image="pencil.circle.fill" catalog="system" id="FjO-Vc-86X">
+                                <color key="tintColor" systemColor="labelColor"/>
+                                <connections>
+                                    <action selector="editButtonClicked:" destination="NHX-fY-FTz" id="2RT-bS-3lu"/>
+                                </connections>
                             </barButtonItem>
                             <barButtonItem title="LeftArrow" image="arrow.left" catalog="system" id="nkT-w3-50H">
                                 <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -104,7 +107,7 @@
                                     <segue destination="C2F-P0-cIX" kind="presentation" identifier="AddItem" id="ZO6-gE-WmS"/>
                                 </connections>
                             </barButtonItem>
-                            <barButtonItem width="29" id="YD7-R2-zjf">
+                            <barButtonItem width="20" id="YD7-R2-zjf">
                                 <color key="tintColor" systemColor="groupTableViewBackgroundColor"/>
                             </barButtonItem>
                             <barButtonItem title="RightArrow" image="arrow.right" catalog="system" id="4xY-PM-8m0">
@@ -114,6 +117,7 @@
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="editButton" destination="FjO-Vc-86X" id="lDO-yA-wwv"/>
                         <outlet property="homeButton" destination="QIh-ZN-o9M" id="tIm-nX-aBy"/>
                         <outlet property="leftArrowButton" destination="nkT-w3-50H" id="xbP-ce-QSL"/>
                         <outlet property="leftSpacer" destination="FjO-Vc-86X" id="3Ie-ha-ecf"/>
@@ -458,10 +462,8 @@
         <image name="checkmark.square.fill" catalog="system" width="128" height="114"/>
         <image name="forward.fill" catalog="system" width="128" height="79"/>
         <image name="house.fill" catalog="system" width="128" height="106"/>
+        <image name="pencil.circle.fill" catalog="system" width="128" height="121"/>
         <image name="zzz" catalog="system" width="121" height="128"/>
-        <systemColor name="groupTableViewBackgroundColor">
-            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
         <systemColor name="groupTableViewBackgroundColor">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
