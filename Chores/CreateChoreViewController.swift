@@ -243,9 +243,15 @@ class CreateChoreViewController: UIViewController, UITextFieldDelegate, UIPicker
             
             let historyRetentionNumber = historyPickerSelection0+1
             let historyRetentionUnit = TimeUnit(rawValue: customRepeatPickerData1[historyPickerSelection1]) ?? TimeUnit.days
+       
             
+            if (chore == nil) {
+                chore = Chore(name: name, type: ChoreType.oneTime, date: nextScheduledDateValue, repeatType: repeatType, endRepeatDate: endRepeatDate, nextRepeatedDate: nil, deleteOnCompletion: deleteOnCompletionSwitch.isOn, customRepeatNumber: customRepeatNumber, customRepeatUnit: customRepeatUnit, toDo: toDo, historyRetentionNumber: historyRetentionNumber, historyRetentionUnit: historyRetentionUnit, pushBackRepeat: pushBackRepeat)
+            }
+            else {
+                chore = Chore(name: name, type: ChoreType.oneTime, date: nextScheduledDateValue, repeatType: repeatType, endRepeatDate: endRepeatDate, completedDates: chore!.completedDates, nextRepeatedDate: nil, deleteOnCompletion: deleteOnCompletionSwitch.isOn, customRepeatNumber: customRepeatNumber, customRepeatUnit: customRepeatUnit, toDo: toDo, historyRetentionNumber: historyRetentionNumber, historyRetentionUnit: historyRetentionUnit, pushBackRepeat: pushBackRepeat)
+            }
             
-            chore = Chore(name: name, type: ChoreType.oneTime, date: nextScheduledDateValue, repeatType: repeatType, endRepeatDate: endRepeatDate, nextRepeatedDate: nil, deleteOnCompletion: deleteOnCompletionSwitch.isOn, customRepeatNumber: customRepeatNumber, customRepeatUnit: customRepeatUnit, toDo: toDo, historyRetentionNumber: historyRetentionNumber, historyRetentionUnit: historyRetentionUnit, pushBackRepeat: pushBackRepeat)
         }
         
     }
