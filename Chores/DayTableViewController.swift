@@ -36,7 +36,7 @@ class DayTableViewController: UITableViewController, UIPickerViewDataSource, UIP
     
     let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateFormat = "MM/dd/yyyy"
+        formatter.dateFormat = "MM/dd"
         return formatter
     }()
     var displayDate = getCorrectDate(date: Date())
